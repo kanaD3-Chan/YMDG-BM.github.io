@@ -1,5 +1,5 @@
 ---
-title: 第一章：线性表 （WIP）
+title: 第一章：线性表
 icon: material-symbols:computer-outline
 index: true
 order: 2

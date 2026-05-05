@@ -44,18 +44,32 @@ typedef struct Node {
 
 ## 链表的实现
 
-接下来，我们将为前面定义的单链表实现上述操作。
+接下来，我们将为前面定义的单链表实现上述操作。这里我们以学生管理系统为案例。
+
+### 定义类型
+```C
+typedef struct {
+  unsigned int id;
+  char name[20];
+  float score;
+} Student;
+
+typedef struct LListNode {
+  Student student;
+
+  struct LListNode *next;
+} LListNode;
+```
 
 ### 创建链表
 ```C
-Node *createNode() {
-  Node *node = (Node *)malloc(sizeof(Node));
-  if (node == NULL)
+LListNode *createLList(Student data) {
+  LListNode *student = (LListNode *)malloc(sizeof(LListNode));
+  if (student == NULL)
     return NULL;
-
-  node->data = 0;
-  node->next = NULL;
-  return node;
+  student->student = data;
+  student->next = NULL;
+  return student;
 }
 
 ```
@@ -63,62 +77,126 @@ Node *createNode() {
 ### 增加节点
 
 ```C
-bool addNode(Node **head, int data, size_t idx) {
-  if (head == NULL)
-    return false;
+void LListAddStudent(LListNode **students, Student data, unsigned int idx) {
+  if (students == NULL)
+    return;
+  LListNode *newNode = (LListNode *)malloc(sizeof(LListNode));
+  if (newNode == NULL)
+    return;
 
-  Node *new_node = createNode();
-  if (new_node == NULL)
-    return false;
-
-  new_node->data = data;
-
-  Node *tmp = *head;
-  size_t index = 0;
-
+  newNode->student = data;
+  newNode->next = NULL;
   if (idx == 0) {
-    new_node->next = *head;
-    *head = new_node;
-    return true;
+    newNode->next = *students;
+    *students = newNode;
+    return;
+  }
+  LListNode *prev = *students;
+
+  for (size_t i = 1; i < idx && prev != NULL; ++i) {
+    prev = prev->next;
   }
 
-  while (tmp != NULL && index != idx - 1) {
-    tmp = tmp->next;
-    index++;
+  if (prev == NULL) {
+    free(newNode);
+    newNode = NULL;
+    return;
   }
 
-  if (tmp == NULL)
-    return false;
-
-  new_node->next = tmp->next;
-  tmp->next = new_node;
-
-  return true;
+  newNode->next = prev->next;
+  prev->next = newNode;
 }
 
+
 ```
+### 删除节点
+
+```C
+void LListDeleteStudent(LListNode **students, unsigned int id) {
+  if (students == NULL || *students == NULL)
+    return;
+
+  LListNode *prev = NULL;
+  LListNode *curr = *students;
+
+  while (curr != NULL && curr->student.id != id) {
+    prev = curr;
+    curr = curr->next;
+  }
+
+  if (curr == NULL)
+    return;
+
+  if (prev == NULL) {
+    *students = curr->next;
+  } else {
+    prev->next = curr->next;
+  }
+
+  free(curr);
+}
+```
+
+
 ### 修改节点内容
 ```C
-bool modifyNode(Node *node, int data, size_t idx) {
-  if (node == NULL)
-    return false;
+void LListModifyStudent(LListNode *students, unsigned int id, Student student) {
+  if (students == NULL)
+    return;
 
-  Node *tmp = node;
-  size_t index = 0;
-
-  while (tmp != NULL && index != idx) {
-    tmp = tmp->next;
-    index++;
+  while (students != NULL) {
+    if (students->student.id == id) {
+      students->student = student;
+      return;
+    }
+    students = students->next;
   }
+}
 
-  if (tmp == NULL)
-    return false;
-  tmp->data = data;
+```
 
-  return true;
+### 查询学生信息
+
+```C
+void LListShowStudent(LListNode *students, unsigned int id) {
+  if (students == NULL)
+    return;
+
+  while (students != NULL) {
+    if (students->student.id == id) {
+      printf("student id: %u, name: %s, score: %f\n", students->student.id,
+             students->student.name, students->student.score);
+      return;
+    }
+    students = students->next;
+  }
+}
+
+
+float LListlookUpScore(LListNode *students, unsigned int id) {
+  LListNode *p = students;
+  while (p != NULL) {
+    if (p->student.id == id)
+      return p->student.score;
+
+    p = p->next;
+  }
+  return -1;
 }
 ```
 
 
+
+### 销毁链表
+```C
+void LListDrop(LListNode *students) {
+  LListNode *curr = students;
+  while (curr != NULL) {
+    LListNode *next = curr->next;
+    free(curr);
+    curr = next;
+  }
+}
+```
 
 [^first]: 增删改查
