@@ -1,4 +1,3 @@
-
 name: 部署文档
 
 on:
@@ -22,9 +21,8 @@ jobs:
 
       - name: 设置 pnpm
         uses: pnpm/action-setup@v4
-        with: 
+        with:
           version: 10.33.0
-
 
       - name: 设置 Node.js
         uses: actions/setup-node@v4
@@ -35,18 +33,18 @@ jobs:
       - name: 安装依赖
         run: |
           corepack enable
-          pnpm install --frozen-lockfile
+          # 允许必要的包运行安装脚本（解决 ERR_PNPM_IGNORED_BUILDS）
+          pnpm install --frozen-lockfile --allow-build=@parcel/watcher,esbuild
 
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
-        run: |-
+        run: |
           pnpm run docs:build
-          > src/.vuepress/dist/.nojekyll
+          touch src/.vuepress/dist/.nojekyll   # 创建 .nojekyll 文件，避免 Jekyll 处理
 
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # 部署文档
           branch: gh-pages
           folder: src/.vuepress/dist
