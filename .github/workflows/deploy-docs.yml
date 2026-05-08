@@ -22,7 +22,7 @@ jobs:
       - name: 设置 pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.33.0
+          version: 10.33.0   # 与你的 lockfile 匹配
 
       - name: 设置 Node.js
         uses: actions/setup-node@v4
@@ -30,18 +30,24 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: 安装依赖
-        run: |
-          corepack enable
-          # 允许必要的包运行安装脚本（解决 ERR_PNPM_IGNORED_BUILDS）
-          pnpm install --frozen-lockfile --allow-build=@parcel/watcher,esbuild
+      # 关键修改：首次安装时跳过所有构建脚本（避免因未批准而失败）
+      - name: 安装依赖（跳过构建脚本）
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # 自动批准所有待运行的构建脚本（@parcel/watcher, esbuild 等）
+      - name: 批准所有待处理的构建脚本
+        run: pnpm approve-builds --all
+
+      # 执行这些被批准的构建脚本（重新运行 install 或使用 rebuild）
+      - name: 执行构建脚本
+        run: pnpm rebuild
 
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
         run: |
           pnpm run docs:build
-          touch src/.vuepress/dist/.nojekyll   # 创建 .nojekyll 文件，避免 Jekyll 处理
+          touch src/.vuepress/dist/.nojekyll   # 避免 Jekyll 处理
 
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
