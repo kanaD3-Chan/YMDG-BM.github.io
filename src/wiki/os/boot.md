@@ -13,19 +13,21 @@ category:
 
 ## 启动全貌
 
-```mermaid
-flowchart LR
-    A[按下电源] --> B[BIOS/UEFI]
-    B --> C[POST 自检]
-    C --> D[读取 MBR]
-    D --> E[Limine Stage 1]
-    E --> F[Limine Stage 2]
-    F --> G[Limine Stage 3]
-    G --> H[加载内核 ELF]
-    H --> I[填充请求响应]
-    I --> J[跳转 kmain]
-    J --> K[内核初始化]
-```
+@startuml
+start
+:按下电源;
+:BIOS/UEFI;
+:POST 自检;
+:读取 MBR;
+:Limine Stage 1;
+:Limine Stage 2;
+:Limine Stage 3;
+:加载内核 ELF;
+:填充请求响应;
+:跳转 kmain;
+:内核初始化;
+stop
+@enduml
 
 ## BIOS 阶段
 

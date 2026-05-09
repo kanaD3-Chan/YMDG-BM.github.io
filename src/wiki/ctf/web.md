@@ -92,20 +92,32 @@ def blind_inject(sql_template):
 
 ### 绕过方法决策树
 
-```mermaid
-flowchart TD
-    A[文件上传] --> B{前端 JS 检查?}
-    B -->|是| C[Burp 抓包，改后缀]
-    B -->|否| D{Content-Type 检查?}
-    D -->|是| E[改 Content-Type 为 image/jpeg]
-    D -->|否| F{后缀黑名单?}
-    F -->|是| G[试: .phtml .php5 .pht .phar 大小写]
-    F -->|否| H{文件头检查?}
-    H -->|是| I[WebShell 前加 GIF89a]
-    H -->|否| J{无法解析 PHP?}
-    J -->|是| K[传 .htaccess: AddType application/x-httpd-php .jpg]
-    J -->|否| L[直接传 WebShell]
-```
+@startuml
+start
+:文件上传;
+if (前端 JS 检查?) then (yes)
+  :Burp 抓包，改后缀;
+else (no)
+  if (Content-Type 检查?) then (yes)
+    :改 Content-Type 为 image/jpeg;
+  else (no)
+    if (后缀黑名单?) then (yes)
+      :试 .phtml .php5 .pht .phar 大小写;
+    else (no)
+      if (文件头检查?) then (yes)
+        :WebShell 前加 GIF89a;
+      else (no)
+        if (无法解析 PHP?) then (yes)
+          :传 .htaccess 配置文件;
+        else (no)
+          :直接传 WebShell;
+        endif
+      endif
+    endif
+  endif
+endif
+stop
+@enduml
 
 ### 一句话 WebShell
 

@@ -78,24 +78,29 @@ static inline void put_pixel(uint32_t x, uint32_t y, uint32_t color) {
 
 ### 字符绘制流程
 
-```mermaid
-flowchart TD
-    A[fb_putchar] --> B{是换行 \\n?}
-    B -->|是| C[光标移到下一行开始]
-    B -->|否| D[定位字形数据: header + c × bytesperglyph]
-    D --> E[逐行扫描字形的每个像素]
-    E --> F{位为 1?}
-    F -->|是| G[put_pixel 白色]
-    F -->|否| H[put_pixel 黑色]
-    G --> I[光标右移一个字符宽]
-    H --> I
-    I --> J{超出右边界?}
-    J -->|是| K[自动换行]
-    J -->|否| L[完成]
-    K --> M{超出底边界?}
-    M -->|是| N[回到顶部: 环形覆盖]
-    M -->|否| L
-```
+@startuml
+start
+:fb_putchar;
+if (是换行 \\n?) then (yes)
+  :光标移到下一行开始;
+else (no)
+  :定位字形数据: header + c × bytesperglyph;
+  :逐行扫描字形的每个像素;
+  if (位为 1?) then (yes)
+    :put_pixel 白色;
+  else (no)
+    :put_pixel 黑色;
+  endif
+  :光标右移一个字符宽;
+  if (超出右边界?) then (yes)
+    :自动换行;
+    if (超出底边界?) then (yes)
+      :回到顶部: 环形覆盖;
+    endif
+  endif
+endif
+stop
+@enduml
 
 ### 输出函数
 
