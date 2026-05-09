@@ -3,10 +3,13 @@ title: SLsec Week2 Affine
 index: true
 icon: codicon:note
 category:
-  - 文章
+  - CTF
+  - Writeup
+  - Crypto
 tag:
   - CTF
-  - Crypto  
+  - Crypto
+  - SLsec  
 ---
 ## Affine 密码简介
 

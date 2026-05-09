@@ -3,10 +3,13 @@ title: 记一次联网CrackMe题出题过程
 index: true
 icon: codicon:note
 category:
-  - 文章
+  - CTF
+  - Writeup
+  - Reverse
 tag:
   - CTF
   - Reverse
+  - 出题
 ---
 ## 出题动机：
 本意是打算出一个仿真题的，逆一个激活码算法。逆出来算法之后就可以结合机器码来算激活码，进而通过程序来请求获取flag了。

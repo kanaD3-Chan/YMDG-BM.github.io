@@ -3,10 +3,13 @@ title: 记一次BadUSB题出题过程
 index: true
 icon: codicon:note
 category:
-  - 文章
+  - CTF
+  - Writeup
+  - Misc
 tag:
   - CTF
   - HardWare
+  - 出题
 ---
 
 笔自己画画.gif
