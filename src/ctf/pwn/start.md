@@ -7,31 +7,111 @@ category:
   - CTF
   - Pwn
 ---
-::: warning
-本文正在施工中
-:::
-工欲善其事，必先利其器。二进制方向，就笔者写完这篇文章时而言，需要的工具并不多，而且与逆向方向有些许重合。我们需要的工具大致如下：
 
-1. IDA Pro，用于逆向拿到的二进制文件，了解程序逻辑。
-2. GDB，用于本地动态调试二进制文件。
-3. Pwndbg，GDB的插件，方便调试。
-4. Pwntools，Python库，用于快速编写exp。
-5. glibc-all-in-one，一个方便的 glibc 二进制和调试文件下载器以及源代码自动构建器。
-6. LibcSearcher，用于在泄露地址后查找对应的 Libc 版本。
-7. ROPgadgets，用于快速查找可用于构建ROP链的指令碎片。
-8. checksec，用于检查程序采取的保护措施。
+工欲善其事，必先利其器。Pwn 需要的工具不多，但少一个都可能卡壳。
 
-上述这些工具差不多够一位二进制手从入门用到内核前了。
+<!-- more -->
 
-本文的目标就是配置pwn的做题环境，但IDA的安装此处就不再赘述。
+## 你需要一台 Linux
 
-## 预备
-由于绝大部分的pwn题都是linux环境下的程序，所以有一个linux虚拟机尤为重要。如果你像笔者一样，在实体机上日用linux的话，那么可以跳过这一步，也可以不跳过。
+绝大部分 Pwn 题都是 Linux 程序。用虚拟机或实体机都行。
 
-我们需要准备两样资料：虚拟机软件安装包与操作系统安装镜像。这里我们使用VirtualBox虚拟机，因为它开源免费。如果您用VMware，那么此处步骤会不太一样，请自行适应。操作系统我们采用Ubuntu，因为它应用更广泛。
+- **虚拟机方案**：VirtualBox（免费）+ Ubuntu 22.04 LTS
+- **实体机方案**：直接装 Ubuntu，或者像笔者一样日用 Arch Linux
 
-VirtualBox安装与操作系统安装不再赘述，如有需要请自行百度。这些在网上资料非常多。
+随便选一个。后面的步骤都假设你在 Linux 上操作。
 
-## 配置pwn环境
+## 工具安装
 
-在安装好虚拟机与操作系统之后，我们就可以配置pwn环境了。
+### 1. Python + Pwntools
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+pip3 install pwntools
+```
+
+验证：
+```python
+python3 -c "from pwn import *; print('OK')"
+```
+
+### 2. GDB + Pwndbg
+
+```bash
+sudo apt install gdb -y
+
+# 安装 pwndbg 插件
+git clone https://github.com/pwndbg/pwndbg
+cd pwndbg
+./setup.sh
+```
+
+安装完后，启动 `gdb` 应该会看到 pwndbg 的彩色界面。
+
+### 3. Checksec
+
+```bash
+pip3 install checksec
+```
+
+用 `checksec ./vuln` 查看程序的保护机制：
+- **Canary**：栈保护，防止溢出
+- **NX**：栈上不可执行
+- **PIE**：地址随机化
+- **RELRO**：GOT 表保护
+
+### 4. ROPgadget
+
+```bash
+pip3 install ROPgadget
+```
+
+用 `ROPgadget --binary ./vuln` 列出所有可用的 gadget。
+
+### 5. LibcSearcher
+
+```bash
+git clone https://github.com/lieanu/LibcSearcher.git
+cd LibcSearcher
+pip3 install -e .
+```
+
+在泄露了 libc 基址后，用来在线查找对应的 libc 版本。
+
+### 6. glibc-all-in-one（可选）
+
+```bash
+git clone https://github.com/matrix1001/glibc-all-in-one.git
+cd glibc-all-in-one
+./download 2.31-0ubuntu9.7_amd64   # 下载题目常用的版本
+```
+
+做堆题时经常需要不同版本的 libc 和 ld。
+
+### 7. IDA Pro
+
+用于分析二进制文件逻辑。没有免费的替代品推荐 Ghidra（NSA 开源的），但入门阶段用 IDA 更友好。安装方法请自行搜索。
+
+## 验证环境
+
+写一个简单的溢出程序测试：
+
+```c
+// test.c
+#include <stdio.h>
+void win() { system("/bin/sh"); }
+void vuln() { char buf[16]; gets(buf); }
+int main() { vuln(); return 0; }
+```
+
+```bash
+gcc -fno-stack-protector -no-pie -o test test.c
+checksec ./test
+```
+
+然后写一个 pwntools 脚本连上去。如果能 shell，环境就 OK 了。
+
+## 练手去处
+
+环境搭好后，去 CTFHub 的 Pwn 技能树或攻防世界找 ret2text 的题开始打。先本地打通，再打远程。
