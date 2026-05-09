@@ -3,9 +3,11 @@ title: ret2shell探索随笔记
 index: true
 icon: codicon:note
 category:
-  - 文章
+  - CTF
+  - 碎碎念
 tag:
   - CTF
+  - 踩坑
 ---
 最近Reverier师傅的回归终端开源了，于是立刻响应，把平台部署了下来供小灯们使用。
 

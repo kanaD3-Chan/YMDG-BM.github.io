@@ -2,9 +2,10 @@
 title: 对当下CTF环境的现状与担忧
 icon: icon-park-solid:brain
 category:
-  - 杂项
+  - 文章
 tag:
   - 杂谈
+  - CTF
 ---
 
 说实话，从入坑CTF至今，我越发觉得，CTF正变得与其他答题型竞赛，甚至中考高考等一样，异化成“应试教育”。
