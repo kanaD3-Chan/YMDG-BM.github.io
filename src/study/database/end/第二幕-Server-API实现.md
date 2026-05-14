@@ -119,6 +119,49 @@ async fn handle_socket(mut socket: WebSocket, state: Arc<AppState>) {
 { "success": false, "data": null,    "error": "错误信息" }
 ```
 
+## 三层架构重构
+
+初版把所有 sqlx 查询直接写在 `handlers.rs` 里，随着接口增多，handler 文件膨胀到 500+ 行，SQL 和业务逻辑混在一起。重构后严格分三层：
+
+```
+config.rs          DB/连接层：创建 MySqlPool，定义 AppState
+repository/        DAO 层：所有 sqlx 查询封装为 Repo 结构体
+  ├── article.rs   ArticleRepo
+  ├── comment.rs   CommentRepo
+  ├── user.rs      UserRepo
+  └── category.rs  CategoryRepo
+handlers.rs        UI/交互层：HTTP 解析 + 业务逻辑 + 响应组装，零 sqlx 调用
+```
+
+Repo 结构体持有 `&MySqlPool` 的引用，生命周期绑定到请求：
+
+```rust
+pub struct ArticleRepo<'a>(pub &'a MySqlPool);
+
+impl<'a> ArticleRepo<'a> {
+    pub async fn list(&self, category: Option<&str>, search: Option<&str>,
+                      page_size: u32, offset: u32) -> Vec<ArticleWithAuthor> { ... }
+    pub async fn find_by_id(&self, id: u32) -> Option<ArticleWithAuthor> { ... }
+    pub async fn create(&self, author_id: u32, title: &str, ...) -> Result<u32, sqlx::Error> { ... }
+    // ...
+}
+```
+
+Handler 只需实例化 Repo，不再直接接触 sqlx：
+
+```rust
+pub async fn list_articles(State(state): State<Arc<AppState>>, ...) -> ... {
+    let repo = ArticleRepo(&state.db);
+    let total = repo.count(cat, search).await;
+    let articles = repo.list(cat, search, page_size, offset).await;
+    Json(ApiResponse::ok(ArticleListResponse { articles, total, ... }))
+}
+```
+
+::: tip
+`ArticleRepo<'a>` 的生命周期参数不是为了复杂性——它只是告诉编译器 Repo 不能比它借用的 Pool 活得更长。实际使用时每个 handler 里直接 `let repo = ArticleRepo(&state.db)` 即可，生命周期自动推断。
+:::
+
 ## 启动方式
 
 ```bash
@@ -130,5 +173,4 @@ cd ~/db_class_design_rs
 cargo run -p forum-server
 
 # 默认监听 0.0.0.0:3000
-# 管理员账号: admin / admin123
 ```
