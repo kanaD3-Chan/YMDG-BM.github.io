@@ -125,6 +125,8 @@ link: 你的博客链接
 background: rgba(253, 230, 138, 0.15) # 你想要的背景板颜色
 ```
 
+然后在本博客的[github仓库](https://github.com/kanaD3-Chan/YMDG-BM.github.io)上发起一个issue或者pr即可。
+
 ## 大手子们
 
 ```component VPCard
