@@ -182,6 +182,26 @@ const decoded = decodeURIComponent(
 
 把字体文件下载到 `public/fonts/` 本地化。注意：loli.net 等镜像站根据 User-Agent 返回不同格式，默认 UA 给 `.ttf`，Chrome UA 才给 `.woff2`。下载 CSS 和字体文件要用同一个 UA，否则 CSS 里的 URL 和实际文件对不上。
 
+### axum 默认 body limit 2MB
+
+传了个 3.8MB 的 PDF，前端报 `Error parsing multipart/form-data request`。查了半天发现 axum 默认 body limit 是 2MB，超过就直接拒绝，连 Multipart extractor 都到不了。
+
+```rust
+Router::new()
+    .layer(DefaultBodyLimit::max(55 * 1024 * 1024))
+```
+
+### k8s pod IP 重启即变，必须用 Service ClusterIP
+
+数据库连的是 ret2shell 的 PostgreSQL StatefulSet pod，配置里写死了 pod IP `10.42.0.46`。服务器一重启，k3s 给 pod 分配了新 IP `10.42.1.16`，服务直接崩了。
+
+正确做法是用 k8s Service 的 ClusterIP——StatefulSet 都有对应的 Service，ClusterIP 是稳定的：
+
+```toml
+[r2s_database]
+host = "10.43.198.186"   # ret2shell-postgresql Service ClusterIP，不会变
+```
+
 ## API 一览
 
 ```
