@@ -109,7 +109,7 @@ I use ::logos:archlinux =2rem::  Arch, btw.
 
 ```yaml
 title: KanaDE的小册子
-desc: 个人技术知识库与学习记录
+desc: 用脚步丈量大地，用双眼见证基层
 logo: https://kanade-chan.top/logo.png
 link: https://kanade-chan.top/
 background: rgba(138, 253, 222, 0.15)
