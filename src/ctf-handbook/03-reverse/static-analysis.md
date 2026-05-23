@@ -20,7 +20,7 @@ sudo apt install ghidra
 # https://hex-rays.com/ida-free/
 ```
 
-推荐入门先用 **IDA Pro**（实验室有授权），熟悉后再学 Ghidra。
+推荐入门先用 **IDA Pro**，熟悉后再学 Ghidra。
 
 ## 第一步：自己编译→反编译
 
