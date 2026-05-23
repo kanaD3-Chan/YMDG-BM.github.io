@@ -136,6 +136,10 @@ pip install capa
 capa binary.exe
 ```
 
+## 课后练习
+
+- [这是什么加密](http://172.16.173.140/training/11?challenge=59) — 识别程序中使用的加密算法，写出对应的解密脚本
+
 ## 练手资源
 
 - 攻防世界 Reverse 中级题（算法逆向系列）

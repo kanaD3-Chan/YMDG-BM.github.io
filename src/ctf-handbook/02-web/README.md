@@ -25,3 +25,13 @@ Web 安全是 CTF 中入门最快的方向，也是最贴近日常开发的赛�
 ## 本章内容
 
 <Catalog />
+
+---
+
+## 课后练习
+
+在 ret2shell 训练场完成以下题目：
+
+- [Ctrl+U](http://172.16.173.140/training/11?challenge=36) — 按下 Ctrl+U 查看网页源代码，flag 就在里面
+- [爬虫不让去的地方](http://172.16.173.140/training/11?challenge=37) — 访问 robots.txt，看看爬虫不想让你看到什么
+- [响应头里的秘密](http://172.16.173.140/training/11?challenge=38) — flag 不在页面上，在 HTTP 响应头里

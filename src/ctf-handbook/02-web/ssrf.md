@@ -106,6 +106,10 @@ cmd = """
 payload = "gopher://127.0.0.1:6379/_" + urllib.parse.quote(cmd)
 ```
 
+## 课后练习
+
+- [让服务器帮我访问](http://172.16.173.140/training/11?challenge=44) — 服务器会抓取你提供的 URL，利用它访问内网资源
+
 ## 练手资源
 
 - CTFHub SSRF 技能树

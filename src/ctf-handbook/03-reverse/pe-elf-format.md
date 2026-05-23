@@ -128,6 +128,10 @@ print(pe.dump_info())
 | Java Class | `CA FE BA BE` | Java 字节码 |
 | DEX | `64 65 78 0A` | Android Dalvik 字节码 |
 
+## 课后练习
+
+- [文件头里的秘密](http://172.16.173.140/training/11?challenge=56) — flag 藏在文件的某个段里，使用 `readelf` 或 010 Editor 分析
+
 ## 练手资源
 
 - 用 `readelf` 分析自己编译的程序

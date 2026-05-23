@@ -112,6 +112,10 @@ token = f"{header}.{payload}."
 hashcat -a 0 -m 16500 jwt.txt wordlist.txt
 ```
 
+## 课后练习
+
+- [你没有权限——真的吗](http://172.16.173.140/training/11?challenge=47) — 普通用户看不到 flag，只有管理员能看，尝试绕过权限校验
+
 ## 练手资源
 
 - CTFHub 越权技能树

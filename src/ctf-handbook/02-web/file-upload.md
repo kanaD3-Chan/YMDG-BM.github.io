@@ -105,6 +105,10 @@ t1.start()
 t2.start()
 ```
 
+## 课后练习
+
+- [上传就完事了？](http://172.16.173.140/training/11?challenge=40) — 一个文件上传页面，尝试绕过限制上传 WebShell
+
 ## 练手推荐
 
 - [Upload-labs](https://github.com/c0ny1/upload-labs) — 21 关文件上传靶场

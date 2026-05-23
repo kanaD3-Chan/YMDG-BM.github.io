@@ -140,6 +140,10 @@ one_gadget = libc.address + 0x4f2a5
 payload = b'A' * offset + p64(one_gadget)
 ```
 
+## 课后练习
+
+- [libc 在哪里](http://172.16.173.140/training/11?challenge=53) — 开了 NX 且没有 win()，泄露 libc 基址后 getshell
+
 ## 练手资源
 
 - CTFHub ret2libc 系列

@@ -152,6 +152,10 @@ p = run_shellcode(shellcode)
 p.interactive()
 ```
 
+## 课后练习
+
+- [写一段 shellcode](http://172.16.173.140/training/11?challenge=49) — 程序直接执行你的输入，需要写一段带字符过滤的 shellcode
+
 ## 练手资源
 
 - CTFHub Pwn shellcode 系列

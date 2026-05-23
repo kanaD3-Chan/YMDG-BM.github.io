@@ -132,6 +132,10 @@ payload += p64(fake_stack)   # 覆盖 rbp
 payload += p64(leave_ret)    # 触发栈迁移
 ```
 
+## 课后练习
+
+- [ROP 链拼图](http://172.16.173.140/training/11?challenge=52) — 开了 NX，没有 shellcode 可用，用 gadget 拼出 ROP 链
+
 ## 练手资源
 
 - CTFHub Pwn 进阶系列

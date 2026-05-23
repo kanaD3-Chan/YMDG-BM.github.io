@@ -172,4 +172,11 @@ Rust 和 Go 的字符串通常在 `.rodata` 段中。找到可疑字符串后，
 
 ---
 
+## 课后练习
+
+- [Rust 逆向](http://172.16.173.140/training/11?challenge=64) — Rust 编译的程序，符号被 demangle 后分析逻辑
+- [Go 逆向](http://172.16.173.140/training/11?challenge=65) — Go 编译的程序，Go 运行时特征明显，找到加密函数还原 flag
+
+---
+
 参考：Rust 逆向官方文档 `docs.rs/rustc-demangle`、Go 官方命令 `go tool nm`。

@@ -137,6 +137,10 @@ print(flag)
   → 写 Python 脚本解密
 ```
 
+## 课后练习
+
+- [IDA 第一课](http://172.16.173.140/training/11?challenge=57) — 用 IDA 分析程序逻辑，反编译找出 flag
+
 ## 练手资源
 
 - 攻防世界 Reverse 新手区（从 easyre 开始）

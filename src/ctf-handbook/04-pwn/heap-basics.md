@@ -159,6 +159,10 @@ bins          # 查看所有 bin 的状态
 vis_heap_chunks  # 可视化堆布局
 ```
 
+## 课后练习
+
+- [堆的第一课](http://172.16.173.140/training/11?challenge=54) — 菜单题有 UAF 漏洞，利用 fastbin attack 改写 `__malloc_hook`
+
 ## 练手资源
 
 - CTFHub 堆利用技能树（从 tcache 开始）

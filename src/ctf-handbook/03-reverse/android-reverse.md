@@ -210,6 +210,10 @@ frida-ps -U               # 列出设备上运行的进程
 objection -g com.xxx -s   # 基于 frida 的交互式分析工具
 ```
 
+## 课后练习
+
+- [APK 拆开看看](http://172.16.173.140/training/11?challenge=62) — 一个简单的 Android APK，反编译后分析 Java 代码找到 flag
+
 ## 练手资源
 
 - [OWASP UnCrackable Apps](https://github.com/OWASP/owasp-mastg/tree/master/Crackmes) — 专为逆向练习设计的 APK
