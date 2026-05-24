@@ -237,8 +237,7 @@ def decode_zero_width(text):
 # https://quipqiup.com/
 
 # 本地工具
-pip install pycipher    # 古典密码库
-pip install cryptography  # 现代密码库
+pip install cryptography  # 现代密码库（包括对称/非对称/哈希等）
 ```
 
 ## 练手资源

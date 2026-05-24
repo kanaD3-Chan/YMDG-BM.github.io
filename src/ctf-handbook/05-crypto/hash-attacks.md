@@ -81,30 +81,19 @@ md5("QNKCDZO")   = "0e830400451993494058024219903391"
 
 **漏洞**：MD5/SHA-1/SHA-256 使用 Merkle-Damgård 结构，可以在不知道 `secret` 的情况下，计算 `hash(secret + message + padding + extension)` 的值。
 
-```bash
-# 使用 hashpump 工具
-# -s: 已知的签名（hash值）
-# -d: 已知的消息
-# -a: 要追加的内容
-# -k: secret 的长度（可以爆破）
-hashpump -s "已知hash" -d "已知消息" -a "追加内容" -k 16
-
-# 输出：
-# 新的 hash 值
-# 新的消息（原消息 + padding + 追加内容）
-```
-
 ```python
-# Python 实现（hlextend 库）
-import hlextend
+# 使用 hashpumpy 库（pip install hashpumpy）
+import hashpumpy
 
-sha = hlextend.new('sha256')
-new_message, new_hash = sha.extend(
-    b'&admin=true',      # 要追加的内容
+# hashpumpy.hashpump(已知hash, 已知消息, 要追加内容, secret长度)
+new_hash, new_message = hashpumpy.hashpump(
+    '已知hash值',        # 已知签名
     b'user=alice',       # 已知消息
-    16,                  # secret 长度
-    '已知hash值'          # 已知签名
+    b'&admin=true',      # 要追加的内容
+    16                   # secret 长度
 )
+print(f"新 hash: {new_hash}")
+print(f"新消息: {new_message}")
 ```
 
 ## 彩虹表与字典攻击

@@ -123,10 +123,47 @@ if exact:
 **条件**：私钥 `d` 很小（`d < n^(1/4) / 3`），通常表现为题目给的 `e` 异常大（接近 n 的数量级）。
 
 ```python
-from owiener import attack
+# Wiener 攻击：基于连分数展开恢复私钥 d
 from Crypto.Util.number import long_to_bytes
 
-d = attack(e, n)
+def wiener_attack(e, n):
+    """连分数逼近法恢复小私钥 d"""
+    def continued_fraction(num, den):
+        cf = []
+        while den:
+            q = num // den
+            cf.append(q)
+            num, den = den, num - q * den
+        return cf
+
+    def convergents(cf):
+        p0, q0 = 0, 1
+        p1, q1 = 1, 0
+        for a in cf:
+            p = a * p1 + p0
+            q = a * q1 + q0
+            yield p, q
+            p0, q0 = p1, q1
+            p1, q1 = p, q
+
+    for k, d in convergents(continued_fraction(e, n)):
+        if k == 0: continue
+        if (e * d - 1) % k != 0: continue
+        phi = (e * d - 1) // k
+        # 解方程 x² - (n-phi+1)x + n = 0
+        b = n - phi + 1
+        delta = b * b - 4 * n
+        if delta < 0: continue
+        from gmpy2 import isqrt
+        sqrt_delta = isqrt(delta)
+        if sqrt_delta * sqrt_delta != delta: continue
+        p = (b + sqrt_delta) // 2
+        q = (b - sqrt_delta) // 2
+        if p * q == n:
+            return d
+    return None
+
+d = wiener_attack(e, n)
 if d:
     m = pow(c, d, n)
     print(long_to_bytes(m))
@@ -145,5 +182,5 @@ if d:
 ## 工具安装
 
 ```bash
-pip3 install pycryptodome gmpy2 sympy owiener
+pip3 install pycryptodome gmpy2 sympy
 ```
