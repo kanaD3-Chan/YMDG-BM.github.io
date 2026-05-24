@@ -68,9 +68,7 @@ pip3 install ROPgadget
 ### 5. LibcSearcher
 
 ```bash
-git clone https://github.com/lieanu/LibcSearcher.git
-cd LibcSearcher
-pip3 install -e .
+pip3 install LibcSearcher
 ```
 
 在泄露了 libc 函数地址后，用来查找对应的 libc 版本。
