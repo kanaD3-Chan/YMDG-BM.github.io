@@ -133,3 +133,7 @@ hashpump -s "已知签名" -d "已知消息" -a "要追加的内容" -k "secret�
 
 - CTFHub Crypto 技能树（AES 相关题目）
 - PortSwigger Web Security Academy（Padding Oracle 模块）
+
+## 课后练习
+
+- [AES 的弱点](http://172.16.173.140/training/11?challenge=70) — AES-ECB 模式 oracle，逐字节推断 flag

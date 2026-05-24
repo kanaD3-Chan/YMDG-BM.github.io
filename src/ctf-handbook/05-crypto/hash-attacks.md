@@ -118,3 +118,7 @@ john --format=raw-md5 --wordlist=rockyou.txt hash.txt
 
 - CTFHub Crypto 哈希相关题目
 - 攻防世界 Crypto 新手区
+
+## 课后练习
+
+- [哈希碰撞](http://172.16.173.140/training/11?challenge=68) — PHP 弱类型 MD5 比较，利用 0e 魔法哈希绕过验证

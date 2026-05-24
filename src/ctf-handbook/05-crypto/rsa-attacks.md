@@ -184,3 +184,7 @@ if d:
 ```bash
 pip3 install pycryptodome gmpy2 sympy
 ```
+
+## 课后练习
+
+- [RSA 不是铁板一块](http://172.16.173.140/training/11?challenge=69) — n 很小，分解后解出私钥拿到 flag

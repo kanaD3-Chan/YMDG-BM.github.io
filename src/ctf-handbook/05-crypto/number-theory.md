@@ -181,3 +181,7 @@ print(L[0])  # 最短向量
 - [Cryptopals](https://cryptopals.com/) — 密码学挑战
 - CTFHub Crypto 数论系列
 - SageMath 官方文档
+
+## 课后练习
+
+- [数论基础](http://172.16.173.140/training/11?challenge=73) — Rabin 密码体制，e 与 phi(n) 不互素，分解 n 后开平方

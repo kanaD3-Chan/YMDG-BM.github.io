@@ -245,3 +245,7 @@ pip install cryptography  # 现代密码库（包括对称/非对称/哈希等�
 - [CryptoHack](https://cryptohack.org/) — 密码学 CTF 平台
 - CTFHub 密码学杂项系列
 - [dcode.fr](https://www.dcode.fr/) — 古典密码工具集
+
+## 课后练习
+
+- [奇怪的编码](http://172.16.173.140/training/11?challenge=67) — 一段非主流编码的字符串，识别编码并解码拿到 flag

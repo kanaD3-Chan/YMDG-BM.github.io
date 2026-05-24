@@ -147,3 +147,7 @@ pip install tinyec
 
 - CTFHub Crypto 椭圆曲线系列
 - [Cryptopals](https://cryptopals.com/) — 密码学挑战（Set 6 有 ECDSA 题）
+
+## 课后练习
+
+- [椭圆曲线上的秘密](http://172.16.173.140/training/11?challenge=74) — 椭圆曲线参数太小，暴力破解离散对数解密 flag

@@ -204,3 +204,7 @@ print(f"最大质因子：{max_factor}")
 - Cryptopals Set 5 — DH 相关挑战
 - CTFHub 密码学 DH 系列
 - [CryptoHack](https://cryptohack.org/) — 专注密码学的 CTF 平台，有大量 DH 题目
+
+## 课后练习
+
+- [密钥交换的漏洞](http://172.16.173.140/training/11?challenge=72) — g 的阶太小，暴力求解离散对数恢复共享密钥
