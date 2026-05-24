@@ -74,7 +74,7 @@ crypto/sha256.Sum256        # 标准库函数路径可见
 这也是 Go 逆向比 Rust 容易的一个原因——符号名直接暴露了功能。
 
 ::: warning
-Go 1.18+ 的 `GOSYMLINK` 默认会 strip 掉部分符号，但 CTF 题通常保留。如果符号被 strip，需要用 `go tool` 分析。
+Go 1.18+ 可以用 `-ldflags="-s -w"` 或 `-trimpath` 去除符号信息，但 CTF 题通常保留。如果符号被 strip，需要用 `go tool objdump` 或动态调试分析。
 :::
 
 ### 关键特征：goroutine 前导码

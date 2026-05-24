@@ -13,10 +13,11 @@ category:
 ## 工具准备
 
 ```bash
-# Linux 下安装 Ghidra（免费）
-sudo apt install ghidra
+# Ghidra（免费，从官网下载）
+# https://ghidra-sre.org/
+# 需要 JDK 11+：sudo apt install openjdk-11-jdk
 
-# 或者下载 IDA Free（免费版，功能有限制）
+# 或者 IDA Free（免费版，功能有限制）
 # https://hex-rays.com/ida-free/
 ```
 
