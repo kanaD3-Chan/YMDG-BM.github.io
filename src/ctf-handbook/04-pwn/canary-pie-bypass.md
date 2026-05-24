@@ -124,6 +124,10 @@ p.sendlineafter(b'input: ', payload)
 p.interactive()
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [绕过保护机制](http://172.16.173.140/training/11?challenge=51) — Canary + PIE 全开，先用格式化字符串泄露地址，再构造溢出

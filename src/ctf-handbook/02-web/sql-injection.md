@@ -132,6 +132,10 @@ for pos in range(1, 20):
 | 所有表 | `GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_schema=database()` |
 | 报错注入 | `updatexml(1,concat(0x7e,(payload),0x7e),1)` |
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [你好，数据库](http://172.16.173.140/training/11?challenge=39) — 一个登录框，尝试用 SQL 注入绕过认证或读取数据

@@ -126,6 +126,10 @@ gcc -shared -o fake_ptrace.so fake_ptrace.c
 LD_PRELOAD=./fake_ptrace.so gdb ./binary
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [断点打在哪里](http://172.16.173.140/training/11?challenge=58) — 程序做了反静态分析，用 GDB 动态调试看穿它的逻辑

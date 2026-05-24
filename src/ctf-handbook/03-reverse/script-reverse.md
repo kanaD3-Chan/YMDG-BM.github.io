@@ -127,6 +127,10 @@ ilspycmd target.exe -o output/
 # dotPeek（JetBrains 出品，免费）
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [Python 也能逆](http://172.16.173.140/training/11?challenge=61) — 一个 Python 字节码（.pyc）文件，反编译后还原出 flag

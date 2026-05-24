@@ -146,6 +146,10 @@ berlekamp_massey([F(b) for b in known_bits])
 - CTFHub 流密码技能树
 - 攻防世界 Crypto 中级题
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [流密码的秘密](http://172.16.173.140/training/11?challenge=71) — 同一密钥流加密两段明文，利用已知明文恢复 flag

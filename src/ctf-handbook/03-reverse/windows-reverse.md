@@ -216,6 +216,10 @@ print(solve_maze(maze))
 4. 可以直接在 dnSpy 中设置断点调试
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [Windows 下的逆向](http://172.16.173.140/training/11?challenge=63) — 一个 Windows exe 程序，用 x64dbg 动态调试拿到 flag

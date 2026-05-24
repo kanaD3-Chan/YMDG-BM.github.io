@@ -107,6 +107,10 @@ p.sendline(payload)
 3. **泄露地址**：用 `%p` 泄露 libc 地址或 canary
 4. **任意写**：用 `fmtstr_payload` 改写 GOT 表，劫持控制流
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [格式化字符串的秘密](http://172.16.173.140/training/11?challenge=50) — `printf(buf)` 格式化字符串漏洞，读取栈上内容并改写全局变量

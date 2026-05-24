@@ -152,6 +152,10 @@ p = run_shellcode(shellcode)
 p.interactive()
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [写一段 shellcode](http://172.16.173.140/training/11?challenge=49) — 程序直接执行你的输入，需要写一段带字符过滤的 shellcode

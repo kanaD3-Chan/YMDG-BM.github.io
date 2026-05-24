@@ -93,6 +93,10 @@ HTTPServer(('0.0.0.0', 8888), Handler).serve_forever()
 - **CSP**：限制页面可以加载的脚本来源
 - **HttpOnly Cookie**：防止 JavaScript 读取 Cookie
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [你的 Cookie 我收下了](http://172.16.173.140/training/11?challenge=41) — 留言板存储型 XSS，窃取管理员 Cookie 获取 flag

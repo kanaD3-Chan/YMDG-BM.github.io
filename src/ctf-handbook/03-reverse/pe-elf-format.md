@@ -128,6 +128,10 @@ print(pe.dump_info())
 | Java Class | `CA FE BA BE` | Java 字节码 |
 | DEX | `64 65 78 0A` | Android Dalvik 字节码 |
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [文件头里的秘密](http://172.16.173.140/training/11?challenge=56) — flag 藏在文件的某个段里，使用 `readelf` 或 010 Editor 分析

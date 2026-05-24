@@ -182,6 +182,10 @@ print(L[0])  # 最短向量
 - CTFHub Crypto 数论系列
 - SageMath 官方文档
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [数论基础](http://172.16.173.140/training/11?challenge=73) — Rabin 密码体制，e 与 phi(n) 不互素，分解 n 后开平方

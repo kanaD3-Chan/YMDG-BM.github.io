@@ -158,6 +158,10 @@ p.sendline(payload)
 p.interactive()
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [溢出第一步](http://172.16.173.140/training/11?challenge=48) — 64 位程序无保护，有 gets() 和 win()，经典的 ret2win

@@ -149,6 +149,10 @@ print(morse_decode(".... . .-.. .-.. ---"))  # HELLO
 - [dCode](https://www.dcode.fr/) — 古典密码在线破解，支持自动识别
 - [quipqiup](https://quipqiup.com/) — 替换密码自动破解
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [凯撒大帝的密信](http://172.16.173.140/training/11?challenge=66) — 一段用凯撒密码加密的密文，枚举 shift 解出 flag

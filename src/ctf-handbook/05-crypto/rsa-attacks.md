@@ -185,6 +185,10 @@ if d:
 pip3 install pycryptodome gmpy2 sympy
 ```
 
+::: note 课后练习
+课后练习需要你连接校园网才能访问内网练习平台。
+:::
+
 ## 课后练习
 
 - [RSA 不是铁板一块](http://172.16.173.140/training/11?challenge=69) — n 很小，分解后解出私钥拿到 flag
