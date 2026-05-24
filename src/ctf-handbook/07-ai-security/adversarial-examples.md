@@ -168,11 +168,10 @@ def add_patch(image, position, size, color):
 Neural Cleanse 是检测后门的经典方法：对每个类别，找到能让所有样本都被分类为该类别的最小扰动。扰动最小的那个类别很可能是后门的目标类别。
 
 ```bash
-# 安装
-pip install neural-cleanse
-
-# 使用
-python neural_cleanse.py --model model.pth --data test_data/
+# Neural Cleanse 是研究工具，从 GitHub 获取
+git clone https://github.com/bolunwang/backdoor.git
+cd backdoor
+# python neural_cleanse.py --model model.pth --data test_data/
 ```
 
 ## 学习资源

@@ -131,20 +131,20 @@ Agent：[读取网页] → [执行隐藏指令] → 删除文件
 - 人工确认：高风险操作需要用户确认
 - 沙箱隔离：Agent 的操作在隔离环境中执行
 
-## OWASP LLM Top 10
+## OWASP LLM Top 10（2025 版）
 
 | 排名 | 漏洞 | 说明 |
 |------|------|------|
 | LLM01 | Prompt Injection | 提示词注入 |
-| LLM02 | Insecure Output Handling | 不安全的输出处理 |
-| LLM03 | Training Data Poisoning | 训练数据投毒 |
-| LLM04 | Model Denial of Service | 模型拒绝服务 |
-| LLM05 | Supply Chain Vulnerabilities | 供应链漏洞 |
-| LLM06 | Sensitive Information Disclosure | 敏感信息泄露 |
-| LLM07 | Insecure Plugin Design | 不安全的插件设计 |
-| LLM08 | Excessive Agency | 过度自主权 |
-| LLM09 | Overreliance | 过度依赖 |
-| LLM10 | Model Theft | 模型窃取 |
+| LLM02 | Sensitive Information Disclosure | 敏感信息泄露 |
+| LLM03 | Supply Chain | 供应链风险 |
+| LLM04 | Data and Model Poisoning | 数据与模型投毒 |
+| LLM05 | Improper Output Handling | 不当输出处理 |
+| LLM06 | Excessive Agency | 过度自主权 |
+| LLM07 | System Prompt Leakage | 系统提示词泄露 |
+| LLM08 | Vector and Embedding Weaknesses | 向量与嵌入弱点 |
+| LLM09 | Misinformation | 错误信息 |
+| LLM10 | Unbounded Consumption | 无限制资源消耗 |
 
 ## 学习资源
 
