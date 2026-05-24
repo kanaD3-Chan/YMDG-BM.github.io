@@ -46,11 +46,9 @@ cd pwndbg
 
 ### 3. Checksec
 
-```bash
-pip3 install checksec
-```
+pwntools 自带 `checksec` 命令，无需额外安装。
 
-用 `checksec ./vuln` 查看程序的保护机制：
+用 `pwn checksec ./vuln` 或 `checksec ./vuln` 查看程序的保护机制：
 
 | 保护 | 含义 |
 |------|------|
@@ -92,6 +90,7 @@ cd glibc-all-in-one
 ```c
 // test.c
 #include <stdio.h>
+#include <stdlib.h>
 void win() { system("/bin/sh"); }
 void vuln() { char buf[16]; gets(buf); }
 int main() { vuln(); return 0; }

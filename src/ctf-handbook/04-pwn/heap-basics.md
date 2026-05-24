@@ -123,6 +123,10 @@ malloc(0x20);  // 返回 target_addr
 
 拿到任意地址写之后，通常改写这些位置来 getshell：
 
+::: warning glibc 版本限制
+`__free_hook` 和 `__malloc_hook` 在 glibc 2.34 中被移除。仅在 glibc < 2.34 可用。glibc 2.34+ 需要使用其他利用技术（如 FSOP、tcache poisoning 打 `_IO_list_all` 等）。
+:::
+
 ```python
 # 方法1：改写 __free_hook 为 system
 # 之后 free(chunk_containing_"/bin/sh") 就会调用 system("/bin/sh")

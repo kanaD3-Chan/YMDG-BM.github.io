@@ -30,6 +30,7 @@ category:
 ```c
 // gcc -fno-stack-protector -no-pie -o vuln vuln.c
 #include <stdio.h>
+#include <stdlib.h>
 
 void win() {
     system("/bin/sh");   // 目标：跳到这个函数

@@ -12,6 +12,10 @@ category:
 
 ## House of Force
 
+::: warning glibc 版本限制
+House of Force 仅在 glibc < 2.29 有效。glibc 2.29 起加入了 top chunk size 校验，阻止了此攻击。
+:::
+
 利用 top chunk 的大小字段，通过分配超大 chunk 来控制 top chunk 指针，进而分配到任意地址。
 
 ```python
@@ -59,6 +63,10 @@ def house_of_force(target_addr, top_chunk_addr, malloc_func):
 ```
 
 ## Unsorted Bin Attack
+
+::: warning glibc 版本限制
+Unsorted Bin Attack 在 glibc 2.29 中被修复（加入了双向链表完整性检查）。仅在 glibc < 2.29 有效。
+:::
 
 将 unsorted bin 中的 chunk 的 bk 指针改为目标地址 - 0x10，当该 chunk 被取出时，会向目标地址写入一个大值（main_arena 地址）。
 

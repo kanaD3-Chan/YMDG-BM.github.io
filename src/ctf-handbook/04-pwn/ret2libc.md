@@ -1,6 +1,6 @@
 ---
 title: ret2libc 与 libc 泄露
-order: 3
+order: 7
 icon: mdi:library-outline
 category:
   - CTF

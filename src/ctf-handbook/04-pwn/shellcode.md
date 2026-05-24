@@ -1,6 +1,6 @@
 ---
 title: Shellcode 编写基础
-order: 6
+order: 3
 icon: mdi:console-line
 category:
   - CTF
