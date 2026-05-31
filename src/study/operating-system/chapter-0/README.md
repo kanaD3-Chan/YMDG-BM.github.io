@@ -2,7 +2,7 @@
 title: 第零章：引导的魔法 —— 从通电到第一个字节
 icon: material-symbols:computer-outline
 index: true
-order: 3
+order: 1
 dir:
   link: true
 

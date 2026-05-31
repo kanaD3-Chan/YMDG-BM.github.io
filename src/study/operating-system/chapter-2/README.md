@@ -2,7 +2,7 @@
 title: 第二章：内存管理
 icon: material-symbols:computer-outline
 index: true
-order: 2
+order: 3
 dir:
   link: true
 
