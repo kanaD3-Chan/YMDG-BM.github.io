@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "study/operation-system/chapter-1/README.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
@@ -183,6 +183,8 @@
       "bases:新建数据库": false
     }
   },
-  "active": "dda2ed84de2f5eca",
-  "lastOpenFiles": []
+  "active": "05489127fc5ea5b1",
+  "lastOpenFiles": [
+    "README 1.md"
+  ]
 }
