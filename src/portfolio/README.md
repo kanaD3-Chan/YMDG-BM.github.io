@@ -208,12 +208,12 @@ logo: https://mcsog.top/images/logo.png
 link: https://mcsog.top/
 background: rgba(253, 230, 138, 0.15)
 ```
-
+---
 ```component VPCard
 title: Lochad
 desc: pwnxnn
 logo: http://lochad.top/wp-content/uploads/2026/04/cropped-cropped-HackerTianyi.jpg
-link: lochad.top
+link: https://lochad.top/
 background: rgba(102, 204, 255, 0.15)
 ```
 
