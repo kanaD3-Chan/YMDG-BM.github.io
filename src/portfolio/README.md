@@ -195,8 +195,8 @@ background: rgba(253, 230, 138, 0.15)
 ```component VPCard
 title: Ined
 desc: KanaDE学姐的小迷弟
-logo: /portfolio/ined.jpg
-link: https://simple9656.github.io/
+logo: ./img/ined.jpg
+link: ttps://boke-murex.vercel.app/
 background: rgba(138, 253, 222, 0.15)
 ```
 
