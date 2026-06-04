@@ -209,6 +209,14 @@ link: https://mcsog.top/
 background: rgba(253, 230, 138, 0.15)
 ```
 
+```
+title: Lochad
+desc: pwnxnn
+logo: http://lochad.top/wp-content/uploads/2026/04/cropped-cropped-HackerTianyi.jpg
+link: lochad.top
+background: rgba(102, 204, 255, 0.15)
+```
+
 <style>
     /* 修复code块溢出导致窄屏渲染异常 */
     code {
