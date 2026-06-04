@@ -89,7 +89,7 @@ I use ::logos:archlinux =2rem::  Arch, btw.
 
 - **QQ**：2079169303 （技术同好欢迎扩列）  
 - **博客**：[kanade-chan.top](https://kanade-chan.top)  
-- [**GitHub**](https://github.com/YMDG-BM)  
+- [**GitHub**](https://github.com/kanaD3-Chan)  
 - [**Gitee**](https://gitee.com/nachn_admin)
 
 > 特别特别好相处！加好友请备注“技术交流”或“友链”～
