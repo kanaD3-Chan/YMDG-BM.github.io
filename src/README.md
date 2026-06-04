@@ -9,7 +9,7 @@ bgImageDark: /assets/bg/green-dark.png
 bgImageStyle:
   background-attachment: fixed
 heroText: KanaDE Notes
-tagline: 用脚步丈量大地，用双眼见证基层
+tagline: 不止思考，要去感受
 actions:
   - text: 学习笔记
     icon: book

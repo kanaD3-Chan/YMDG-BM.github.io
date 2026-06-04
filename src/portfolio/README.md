@@ -109,7 +109,7 @@ I use ::logos:archlinux =2rem::  Arch, btw.
 
 ```yaml
 title: KanaDE的小册子
-desc: 用脚步丈量大地，用双眼见证基层
+desc: 不止思考，要去感受
 logo: https://kanade-chan.top/logo.png
 link: https://kanade-chan.top/
 background: rgba(138, 253, 222, 0.15)
@@ -191,6 +191,15 @@ logo: https://simple9656.github.io/img/9.jpg
 link: https://simple9656.github.io/
 background: rgba(253, 230, 138, 0.15) 
 ```
+---
+```component VPCard
+title: Ined
+desc: KanaDE学姐的小迷弟
+logo: /portfolio/ined.jpg
+link: https://simple9656.github.io/
+background: rgba(138, 253, 222, 0.15)
+```
+
 <style>
     /* 修复code块溢出导致窄屏渲染异常 */
     code {
