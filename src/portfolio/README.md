@@ -200,6 +200,15 @@ link: https://boke-murex.vercel.app/
 background: rgba(138, 253, 222, 0.15)
 ```
 
+
+```component VPCard
+title: f00001111
+desc: f00001111的学习记录
+logo: https://mcsog.top/images/logo.png
+link: https://mcsog.top/
+background: rgba(253, 230, 138, 0.15)
+```
+
 <style>
     /* 修复code块溢出导致窄屏渲染异常 */
     code {
