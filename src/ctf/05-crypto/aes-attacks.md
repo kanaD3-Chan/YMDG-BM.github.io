@@ -40,13 +40,17 @@ plaintext = unpad(cipher.decrypt(ciphertext), 16)
                 ↑ 相同！
 ```
 
-### 攻击一：ECB 字节翻转（选择明文攻击）
+### 攻击一：ECB 逐字节恢复（选择明文攻击）
 
 **场景**：你能控制部分明文，服务器用 ECB 加密后返回密文。
 
 **目标**：让加密结果包含你想要的内容（比如 `admin=true`）。
 
 **原理**：通过精心构造输入，让目标字节恰好落在某个块的边界，然后逐字节枚举。
+
+::: warning
+下面的代码假设 `prefix` 为空。实际题目里若有固定前缀，先发几个不同长度的输入探测块边界，把对齐长度算出来，再套同样的思路。
+:::
 
 ```python
 # 示例：服务器加密 prefix + your_input + suffix
@@ -73,7 +77,7 @@ for i in range(len(suffix)):
             break
 ```
 
-### 攻击二：ECB 重放攻击
+### 攻击二：ECB 剪切拼接攻击
 
 **场景**：Cookie 或 Token 用 ECB 加密，你能注册用户名。
 

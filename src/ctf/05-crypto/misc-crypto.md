@@ -49,7 +49,11 @@ base64.b16decode("48656C6C6F")
 
 # Base85（ASCII85）
 import base64
-base64.a85decode(b"<~87cURD]i,\"Ebo7~>")
+base64.a85decode(b"<~87cURD]i,\"Ebo7~>", adobe=True)
+
+# Base85（Python b85，字符集是 0-9A-Za-z!#$%&()*+-;<=>?@^_`{|}~）
+b85 = base64.b85encode(b"Hello World")
+base64.b85decode(b85)
 
 # Base58（比特币地址用）
 # pip install base58

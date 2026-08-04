@@ -80,7 +80,8 @@ def create_adversarial_visual_prompt(image, target_text, model, processor):
 
         loss.backward()
         with torch.no_grad():
-            img_tensor -= 0.01 * img_tensor.grad.sign()
+            # loss 取负后，加梯度方向等价于最小化目标类别的损失
+            img_tensor += 0.01 * img_tensor.grad.sign()
             img_tensor = torch.clamp(img_tensor, 0, 1)
         img_tensor.requires_grad_(True)
 

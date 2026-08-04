@@ -109,12 +109,18 @@ fastbin 也是单向链表，但有大小检查（size 字段必须匹配）。
 
 ```c
 void *a = malloc(0x20);
+void *b = malloc(0x20);
 free(a);
-free(a);  // double free！fastbin: a → a（循环）
+free(b);
+free(a);  // double free！中间隔一次 free，绕过 fasttop 检查
+// fastbin: a → b → a（a 出现两次）
 
 malloc(0x20);  // 返回 a
-// 修改 a 的 fd
+malloc(0x20);  // 返回 b，此时链表头还是 a
+// 修改 a 的 fd（a 还在链表里，但我们仍持有原来的指针）
 *(long *)a = target_addr;
+// 链表变成 a → target_addr
+
 malloc(0x20);  // 返回 a
 malloc(0x20);  // 返回 target_addr
 ```

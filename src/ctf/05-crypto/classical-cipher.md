@@ -66,7 +66,7 @@ codecs.decode("Uryyb Jbeyq", 'rot_13')  # → "Hello World"
 
 ## 维吉尼亚密码
 
-用一个密钥字符串循环异或，每个字母的位移量由密钥决定。
+用一个密钥字符串循环决定每个字母的位移量（模 26 加法，不是异或）。
 
 ```python
 def vigenere_decrypt(ciphertext, key):
@@ -90,16 +90,16 @@ def vigenere_decrypt(ciphertext, key):
 
 ## 栅栏密码
 
-把字符串按 N 列排列，然后按行读取（或反过来）。
+把字符串按 N 条轨道（rails）来回写，再按行读取。
 
 ```
 原文：HELLOWORLD
-按 2 列排列：
-H E L L O
-W O R L D
-按行读取：HELOWORLDL → 密文
+按 2 条轨道来回写：
+轨道1：H . L . O . O . L .
+轨道2：. E . L . W . R . D
+按行读取：HLOOLELWRD → 密文
 
-解密：把密文按 N 行排列，按列读取
+解密：先按密文长度生成同样的轨道模式，把密文按轨道回填，再沿原路径读出
 ```
 
 ```python

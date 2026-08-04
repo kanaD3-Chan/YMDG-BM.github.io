@@ -124,7 +124,7 @@ print(pe.dump_info())
 |------|---------|------|
 | ELF | `7F 45 4C 46` | `.ELF` |
 | PE | `4D 5A` | `MZ`（DOS Header） |
-| Mach-O | `CE FA ED FE` | macOS 可执行文件 |
+| Mach-O | `CE FA ED FE`（64 位为 `CF FA ED FE`） | macOS 可执行文件 |
 | Java Class | `CA FE BA BE` | Java 字节码 |
 | DEX | `64 65 78 0A` | Android Dalvik 字节码 |
 

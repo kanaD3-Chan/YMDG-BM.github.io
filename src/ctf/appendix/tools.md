@@ -82,7 +82,7 @@ pip3 install pycryptodome gmpy2 sympy owiener
 sudo apt install sagemath
 ```
 
-在线工具：
+在线/本地工具：
 - [CyberChef](https://gchq.github.io/CyberChef/) — 编码/解码/加密
 - [FactorDB](http://factordb.com/) — 大整数分解数据库
 - [dCode](https://www.dcode.fr/) — 古典密码在线解密

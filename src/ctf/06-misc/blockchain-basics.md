@@ -160,7 +160,7 @@ tx = contract.functions.attack().build_transaction({
     'gas': 200000,
 })
 signed = w3.eth.account.sign_transaction(tx, private_key)
-w3.eth.send_raw_transaction(signed.rawTransaction)
+w3.eth.send_raw_transaction(signed.raw_transaction)  # web3.py v6 的写法
 ```
 
 ## 练手资源

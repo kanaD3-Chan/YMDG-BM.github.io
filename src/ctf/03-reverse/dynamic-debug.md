@@ -122,7 +122,7 @@ cat > fake_ptrace.c << 'EOF'
 #include <sys/ptrace.h>
 long ptrace(int req, ...) { return 0; }
 EOF
-gcc -shared -o fake_ptrace.so fake_ptrace.c
+gcc -shared -fPIC -o fake_ptrace.so fake_ptrace.c
 LD_PRELOAD=./fake_ptrace.so gdb ./binary
 ```
 

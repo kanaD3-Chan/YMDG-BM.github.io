@@ -143,7 +143,7 @@ print(data['archived_snapshots'])
 
 # truffleHog：扫描 git 历史中的敏感信息
 pip install truffleHog
-trufflehog git https://github.com/user/repo
+trufflehog https://github.com/user/repo
 ```
 
 ## CTF OSINT 解题流程

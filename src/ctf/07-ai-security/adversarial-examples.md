@@ -100,13 +100,13 @@ def targeted_attack(model, image, target_label, epsilon=0.1, steps=100):
     for _ in range(steps):
         perturbed.requires_grad = True
         output = model(perturbed)
-        # 最大化目标类别的概率（最小化 loss）
+        # loss 取负：沿它的梯度方向更新，等价于最小化目标类别的交叉熵
         loss = -nn.CrossEntropyLoss()(output, target_label)
 
         model.zero_grad()
         loss.backward()
 
-        perturbed = perturbed - 0.01 * perturbed.grad.sign()
+        perturbed = perturbed + 0.01 * perturbed.grad.sign()
         delta = torch.clamp(perturbed - image, -epsilon, epsilon)
         perturbed = torch.clamp(image + delta, 0, 1).detach()
 

@@ -15,7 +15,7 @@ category:
 ```bash
 # Ghidra（免费，从官网下载）
 # https://ghidra-sre.org/
-# 需要 JDK 11+：sudo apt install openjdk-11-jdk
+# 需要较新的 JDK（官方要求通常是 17+）：sudo apt install openjdk-17-jdk
 
 # 或者 IDA Free（免费版，功能有限制）
 # https://hex-rays.com/ida-free/
