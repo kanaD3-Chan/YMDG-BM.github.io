@@ -86,6 +86,8 @@ sudo apt install sagemath
 - [CyberChef](https://gchq.github.io/CyberChef/) — 编码/解码/加密
 - [FactorDB](http://factordb.com/) — 大整数分解数据库
 - [dCode](https://www.dcode.fr/) — 古典密码在线解密
+- [Ciphey](https://github.com/Ciphey/Ciphey) — 自动化解密，识别常见编码和古典密码
+- [Yafu](https://sourceforge.net/projects/yafu/) — 本地大数分解工具
 
 ## Misc 方向
 
@@ -98,10 +100,26 @@ sudo apt install ruby
 gem install zsteg
 ```
 
+MISC 综合解题工具：
+- [随波逐流](http://1o1o.xyz/index.html) — 离线加解密、编码转换、隐写查看
+- [PuzzleSolver](https://github.com/Byxs20/PuzzleSolver) — MISC 综合解题工具
+
 Windows 工具：
 - [010 Editor](https://www.sweetscape.com/010editor/) — 十六进制编辑器（付费，找学长要或翻实验室网盘）
+- [ImHex](https://github.com/WerWolv/ImHex) — 开源十六进制编辑器（010 Editor 的免费替代）
 - [Audacity](https://www.audacityteam.org/) — 音频频谱分析
 - [Volatility](https://www.volatilityfoundation.org/) — 内存取证
+
+## AWD 方向
+
+AWD 拼的就是通防脚本和手速：
+
+| 工具 | 地址 | 用途 |
+|------|------|------|
+| evilPatcher | https://github.com/TTY-flag/evilPatcher | Pwn 题通防 |
+| AoiAWD | https://github.com/DasSecurity-HatLab/AoiAWD | Web 题通防 |
+| 0E7 | https://github.com/huangzheng2016/0E7 | AWD 工具箱 |
+| S4DFarm | https://github.com/C4T-BuT-S4D/S4DFarm | Flag 管理 |
 
 ## 在线平台
 
@@ -120,6 +138,9 @@ Windows 工具：
 | 资源 | 地址 | 用途 |
 |------|------|------|
 | Hello-CTFtime 赛事日历 | https://hello-ctf.com/Event/ | 国内外 CTF 赛事聚合，自动化更新，打比赛前先看这里 |
+| 工具 / MCP 合集 | https://hello-ctf.com/sidebar/tools.html | 全方向工具搜索，支持关键词筛选 |
+| CTF 技能树 | https://hello-ctf.com/sidebar/ctf-skill.html | 按方向查知识点（本站附录有整理版：[技能树](./skill-tree)） |
+| 历史比赛附件 | https://hello-ctf.com/sidebar/archives.html | CTF-Archives 收录的历届比赛附件归档 |
 | CTFtools-wiki | https://hello-ctf.com/hc-toolkit/ | CTF 工具百科，按 Web/Misc/Crypto/Reverse/Pwn/AWD 分类，带下载地址和使用文档 |
 | NSSCTF | https://www.nssctf.cn/ | Hello-CTF 的配套刷题平台，教程里的题可以直接在上面开 |
 | CTF-OS | https://github.com/ProbiusOfficial/CTF-OS | 开箱即用的 CTF 环境镜像，不想自己折腾虚拟机环境可以试试 |
