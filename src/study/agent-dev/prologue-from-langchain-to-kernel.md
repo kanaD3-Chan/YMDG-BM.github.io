@@ -122,7 +122,6 @@ tag:
 
 ## 三层架构
 
-```plantuml
 @startuml 三层架构
 skinparam componentStyle rectangle
 
@@ -164,7 +163,6 @@ registry --> model : 服务句柄
 session --> storage
 loop --> audit
 @enduml
-```
 
 这张图是整个系列的地图。看不懂没关系，第一幕会把每一条边讲清楚，包括"为什么插件只能走服务句柄、不能直接碰文件系统"。
 
