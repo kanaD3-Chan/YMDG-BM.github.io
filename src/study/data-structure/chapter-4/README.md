@@ -14,4 +14,9 @@ category:
 
 这一章包括邻接矩阵/邻接表两种存储、DFS/BFS 遍历，以及 Prim 最小生成树，内容整理自数据结构课程实验。
 
+本章内容：
+
+- [第一幕：图的存储与遍历](./graph-storage-traverse) —— 邻接矩阵、邻接表、DFS/BFS
+- [第二幕：最小生成树——Prim](./prim-mst) —— lowcost/closest 数组与贪心过程
+
 <Catalog />
