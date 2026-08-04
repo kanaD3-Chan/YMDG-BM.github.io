@@ -121,6 +121,44 @@ def decode_zero_width(text):
     return ''.join(chr(int(bits[i:i+8], 2)) for i in range(0, len(bits), 8) if bits[i:i+8])
 ```
 
+### 游戏内自创文字（原神 / 鸣潮 / MC 附魔台）
+
+游戏主题的题里，经常直接甩给你一段游戏内文字。这类文字大多是单表替换——厂商给 26 个英文字母各造了一套符号，破译出来通常是英文。难点不在密码学，而在认出这是哪个游戏的哪套文字，再找到民间整理好的对照表。看到陌生符号先别当密码硬刚，先问一句：这像哪个游戏的字体？
+
+| 游戏 | 文字 | 识别点 |
+|------|------|--------|
+| 原神 | 提瓦特通用文字（Teyvat Script） | 哥特花体风格，最常考；另有古体、稻妻文、须弥雨林/沙漠文、层岩变体，内容多为英文 |
+| 鸣潮 | 鸣文 / Solaris-3 Script | 几何折线感强的变形拉丁字母，民间已整理出 24 个字母；部分对照还带 4 位凯撒偏移 |
+| 崩坏：星穹铁道 | 翁法洛斯等架空文字 | 黑塔空间站、贝洛伯格等地都有可破译文字，3.2 版本隐藏兑换码谜题也用过文字表 |
+| 绝区零 | 空洞文字 | 社区已破译一套字母表，另外还有一套至今没破译完 |
+| 明日方舟 | 泰拉各国文字 | 社区整理出多种可翻译文字；部分活动 LOGO 直接使用古弗萨克如尼符文（Elder Futhark） |
+| Minecraft | 标准银河字母（SGA） | 附魔台飘着的符文，源自《Commander Keen》，1:1 对应英文字母，最常考 |
+
+实用工具：
+
+```bash
+# dCode 原神各语言翻译器（提瓦特/深渊/稻妻/须弥等）
+# https://www.dcode.fr/genshin-impact-languages
+
+# dCode 标准银河字母翻译器（MC 附魔台）
+# https://www.dcode.fr/standard-galactic-alphabet
+
+# Minecraft 附魔台文字翻译（带 A-Z 对照表）
+# https://www.minecraftmaps.com/tools/enchanting-table-translator
+
+# 米哈游架空文字字体合集（原神/星铁/绝区零，GitHub）
+# https://github.com/SpeedyOrc-C/HoYo-Glyphs
+
+# 鸣潮文字对照表（NGA 整理）
+# https://bbs.nga.cn/read.php?tid=40341224
+
+# 原神 Teyvat Script / 鸣潮 Solaris-3 Script 的词条
+# https://genshin-impact.fandom.com/wiki/Teyvat_Script
+# https://wutheringwaves.fandom.com/wiki/Solaris-3_Script
+```
+
+套路就是三步：认游戏、找对照表、照着表把符号抄成英文。同一个游戏里往往还不止一套变体（原神光是提瓦特文就有通用、古体、稻妻、须弥好几套），抄完发现是乱码时，回头再检查一下是不是用错对照表了。
+
 ## 多层编码
 
 CTF 中经常把多种编码叠加：
