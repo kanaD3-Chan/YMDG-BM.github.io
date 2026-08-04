@@ -164,13 +164,13 @@ package "Kernel（Rust 内核）" {
   [工具注册与调度] as registry
   [会话调度 / 消息树] as session
   [审计与日志] as audit
-}
 
-package "内核插件（信任边界内）" {
-  [storage 存储] as storage
-  [memory 记忆] as memory
-  [compute 验算桥接] as compute
-  [model 双模型服务] as model
+  package "内核插件（信任边界内）" {
+    [storage 存储] as storage
+    [memory 记忆] as memory
+    [compute 验算桥接] as compute
+    [model 双模型服务] as model
+  }
 }
 
 package "用户插件（业务）" {
