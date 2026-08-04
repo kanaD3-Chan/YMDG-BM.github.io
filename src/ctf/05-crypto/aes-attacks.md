@@ -129,11 +129,6 @@ ciphertext[block_index * 16 + byte_offset] ^= (ord('a') ^ ord('A'))
 hashpump -s "已知签名" -d "已知消息" -a "要追加的内容" -k "secret长度"
 ```
 
-## 练手资源
-
-- CTFHub Crypto 技能树（AES 相关题目）
-- PortSwigger Web Security Academy（Padding Oracle 模块）
-
 ::: note 课后练习
 课后练习需要你连接校园网才能访问内网练习平台。
 :::
@@ -141,3 +136,8 @@ hashpump -s "已知签名" -d "已知消息" -a "要追加的内容" -k "secret�
 ## 课后练习
 
 - [AES 的弱点](http://172.16.173.140/training/11?challenge=70) — AES-ECB 模式 oracle，逐字节推断 flag
+
+## 练手资源
+
+- CTFHub Crypto 技能树（AES 相关题目）
+- PortSwigger Web Security Academy（Padding Oracle 模块）
