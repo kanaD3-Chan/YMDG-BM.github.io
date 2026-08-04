@@ -8,96 +8,82 @@ category:
   - VS1053
 ---
 
-VS1053 有两套 SPI 接口共用一组引脚，通过两个片选信号区分：XCS 用于命令（SCI），XDCS 用于数据（SDI）。
-
-<!-- more -->
-
-## VS1053 是什么
-
-VS1053 是 VLSI 出品的音频编解码芯片，能硬件解码 MP3、WAV、AAC、FLAC 等格式。我们只需通过 SPI 把音频数据"喂"给它，它就会自动输出模拟音频信号，不需要 CPU 参与解码运算。
+VS1053 有两套接口共用同一组 SPI 引脚，靠两个片选区分：**XCS** 选通控制接口（SCI，读写寄存器），**XDCS** 选通数据接口（SDI，喂音频数据）。
 
 ## 引脚连接
 
+VS1053 挂在 **SPI2** 上，DREQ 接外部中断：
+
 | 信号 | GPIO | 说明 |
 |---|---|---|
-| SPI1_SCK | PA5 | SPI 时钟 |
-| SPI1_MOSI | PA7 | 主机输出 → VS1053 输入 |
-| SPI1_MISO | PA6 | VS1053 输出 → 主机输入 |
-| XCS | PA4 | 命令片选（SCI，低有效） |
-| XDCS | PC4 | 数据片选（SDI，低有效） |
-| RST | PB0 | 硬件复位 |
-| DREQ | PC5 | 数据请求（VS1053 FIFO 状态指示） |
+| SPI2_SCK | PB13 | SPI 时钟 |
+| SPI2_MOSI | PB15 | 主机输出 → VS1053 |
+| SPI2_MISO | PB14 | VS1053 输出 → 主机 |
+| XCS | PA9 | 命令片选（SCI，低有效） |
+| XDCS | PA10 | 数据片选（SDI，低有效） |
+| DREQ | PA11 | 数据请求（EXTI11，高电平可收数据） |
+| RST | PA12 | 硬件复位（低有效） |
 
-`DREQ` 是关键信号——VS1053 内部有一个 2048 字节的 FIFO。`DREQ` 为高时可以继续发送数据，为低时必须等待。
-
-## SPI 初始化
+TX 用 `DMA1_CH4`，RX 用 `DMA1_CH3`：
 
 ```rust
-use embassy_stm32::spi::{self, Spi};
-use embassy_stm32::exti::ExtiInput;
-use embassy_stm32::gpio::{Output, Level, Speed};
-
-let spi1 = spi::Spi::new(
-    p.SPI1,
-    p.PA5,        // SCK
-    p.PA7,        // MOSI
-    p.PA6,        // MISO
-    p.DMA2_CH3,   // TX DMA
-    p.DMA2_CH0,   // RX DMA
+let vs_spi = spi::Spi::new(
+    p.SPI2,
+    p.PB13,      // SCK
+    p.PB15,      // MOSI
+    p.PB14,      // MISO
+    p.DMA1_CH4,  // TX
+    p.DMA1_CH3,  // RX
     Irqs,
-    spi::Config::default(),
+    vs_spi_config(Hertz::hz(1_000_000)),
 );
-
-let xcs = Output::new(p.PA4, Level::High, Speed::Low);
-let xdcs = Output::new(p.PC4, Level::High, Speed::Low);
-let rst = Output::new(p.PB0, Level::Low, Speed::Low);
-let dreq = ExtiInput::new(p.PC5, p.EXTI5, Pull::None, Irqs);
+let dreq = ExtiInput::new(p.PA11, p.EXTI11, Pull::None, Irqs);
+let xcs = Output::new(p.PA9, Level::High, Speed::VeryHigh);
+let xdcs = Output::new(p.PA10, Level::High, Speed::VeryHigh);
+let rst = Output::new(p.PA12, Level::Low, Speed::Low);
 ```
 
-::: tip 片选初始电平
-XCS 和 XDCS 都是低电平有效。初始化时全部拉高，确保 VS1053 不会误读总线上的杂乱数据。
-:::
+初始速度只有 1 MHz，因为复位后芯片内部时钟还没稳定。
+
+## DREQ 与流控
+
+VS1053 内部有 2048 字节的接收 FIFO。`DREQ` 为高表示可以继续收数据，为低表示 FIFO 快满了，必须等。DREQ 接成 `ExtiInput`，`wait_for_high()` 是异步等待，不会忙等，让出 CPU 给其他任务。
 
 ## SCI 寄存器写入
 
-通过 SCI 接口写寄存器，格式为 4 字节命令帧：`[0x02] [address] [data_high] [data_low]`。
+SCI 写命令是 4 字节帧：`[0x02] [地址] [数据高8位] [数据低8位]`：
 
 ```rust
 pub async fn sci_write(&mut self, address: u8, data: u16) -> Result<(), spi::Error> {
-    self.dreq.wait_for_high().await;   // 等芯片就绪
-    self.xcs.set_low();                // 选中 SCI
+    self.wait_freq().await;
+    self.xcs.set_low();
 
     let tx_buf: [u8; 4] = [0x02, address, (data >> 8) as u8, (data & 0xFF) as u8];
     self.spi.write(&tx_buf).await?;
 
-    self.xcs.set_high();               // 释放 SCI
-    self.dreq.wait_for_high().await;   // 等芯片处理完成
+    self.xcs.set_high();
+    self.wait_freq().await;
     Ok(())
 }
 ```
 
-`dreq.wait_for_high()` 是 Embassy 的异步等待——不会忙等，而是让出 CPU 给其他任务。
-
 ## 初始化时序
-
-VS1053 上电后需要特定时序才能进入工作状态：
 
 ```rust
 pub async fn init(&mut self) -> Result<(), spi::Error> {
-    // 硬件复位
     self.rst.set_low();
     Timer::after_millis(10).await;
     self.rst.set_high();
     Timer::after_millis(10).await;
-    self.dreq.wait_for_high().await;
+    self.wait_freq().await;
 
-    // 低速模式（1 MHz）写关键配置
+    // 低速写关键配置
     self.set_speed(Hertz(1_000_000))?;
     self.sci_write(0x00, 0x0800).await?;   // MODE: 软件复位
-    self.sci_write(0x03, 0x8800).await?;   // CLOCKF: 8× 倍频
+    self.sci_write(0x03, 0x8800).await?;   // CLOCKF: 8x 倍频
     Timer::after_millis(2).await;
 
-    // 切高速（8 MHz）
+    // PLL 锁定后切高速
     self.set_speed(Hertz(8_000_000))?;
     Ok(())
 }
@@ -106,9 +92,20 @@ pub async fn init(&mut self) -> Result<(), spi::Error> {
 | 寄存器 | 地址 | 写入值 | 作用 |
 |---|---|---|---|
 | MODE | 0x00 | 0x0800 | 软件复位 |
-| CLOCKF | 0x03 | 0x8800 | 时钟 8× 倍频 |
-| VOL | 0x0B | 可变 | 左右声道音量 |
+| CLOCKF | 0x03 | 0x8800 | 内部时钟 8× 倍频 |
+| VOL | 0x0B | 0x0000~0xFEFE | 音量，0 最大声 |
 
-::: warning 为什么先低速后高速？
-VS1053 复位后内部时钟尚未稳定，直接用 8 MHz 通信可能失败。1 MHz 写关键配置，等 PLL 锁定后再切高速。
+音量的映射是反的：`0x0000` 最大声，`0xFEFE` 几乎静音。设置百分比时做一个反转：
+
+```rust
+pub async fn set_volume(&mut self, percent: u8) -> Result<(), spi::Error> {
+    let percent = percent.min(100);
+    let val = (100 - percent as u16) * 254 / 100;
+    let vol = (val << 8) | val;   // 左右声道相同
+    self.sci_write(0x0B, vol).await
+}
+```
+
+::: warning 为什么先低速后高速
+VS1053 复位后 PLL 还没锁定，直接拿 8 MHz 通信可能失败。1 MHz 写完 MODE 和 CLOCKF，等 2 ms 让时钟稳定，再切 8 MHz。
 :::

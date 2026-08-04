@@ -10,39 +10,42 @@ category:
   - 嵌入式开发
   - 环境配置
 ---
-工欲善其事，必先利其器。在进行我们的嵌入式开发之旅之前，我们要先配置好环境。好在，rust的环境配置十分省心。
+工欲善其事，必先利其器。Rust 的嵌入式环境配置比传统 C 工程省心得多：不用折腾 Makefile、链接脚本和头文件路径，cargo 一把梭。
+
+这一章把工具链、烧录器和工程骨架搭好，最后用一个闪灯程序验证整条链路。
 
 ::: important
-注意：这部分内容仅仅基于作者本人操作系统环境—— Arch Linux撰写。对自己环境的适配，请根据自己实际情况酌情修改我们提供的代码和命令。stlink等的驱动不在这个部分的讨论范围内。
+本部分基于 Arch Linux 编写，命令以 pacman 为例；stlink 等驱动不在讨论范围内。其他系统请根据自己环境酌情适配。
 :::
 
-我们只需要用pacman安装rustup即可。
+## 安装工具链
 
 ```bash
 sudo pacman -S rustup
 rustup install stable
 rustup target add thumbv7em-none-eabihf
 ```
-安装完成后，需要安装probe-rs，便于我们进行固件烧录。
+
+`thumbv7em-none-eabihf` 是 Cortex-M4F 的裸机目标。加了这个 target，编译器才能生成不带操作系统的代码。
+
+烧录用 `probe-rs`，它同时负责下载固件和开调试通道：
 
 ```bash
-cargo install probe-rs
+cargo install probe-rs-tools
 ```
 
-至此，我们的基本环境就安装完毕了。接下来，我们用cargo 新建一个项目文件夹，开始我们的embedded rust之旅。
+::: note
+老教程会写 `cargo install probe-rs`，那是旧包名。现在的 crate 叫 `probe-rs-tools`，装完提供 `probe-rs` 命令。
+:::
+
+## 新建工程
 
 ```bash
 cargo new stm32-ipod-rs
 cd stm32-ipod-rs
 ```
 
-为了让编译器知道我们的目标平台是我们的stm32，我们需要手动创建一个配置文件。
-
-```bash
-mkdir .cargo
-touch .cargo/config.toml
-```
-写入这些内容：
+创建一个 `.cargo/config.toml`，告诉 cargo 目标平台和烧录方式：
 
 ```toml
 [build]
@@ -50,75 +53,70 @@ target = "thumbv7em-none-eabihf"
 
 [target.thumbv7em-none-eabihf]
 rustflags = ["-C", "link-arg=-Tlink.x", "-C", "link-arg=-Tdefmt.x"]
-runner = "probe-rs run --chip STM32F407ZG"
+runner = "probe-rs run --chip STM32F407ZGTx"
 ```
-即可。现在，我们执行cargo run，就会把我们的项目编译，并自动顺着stlink烧录到单片机上。
 
-为了为单片机写程序，我们需要这些库。这是截至本文撰写完毕时这个项目用到的库，请酌情采用。
+`link.x` 是 cortex-m-rt 的链接脚本，`defmt.x` 是 defmt 日志宏需要的链接段。`memory.x` 不用自己写——embassy-stm32 开了 `memory-x` feature，链接时自动提供。
+
+## 依赖清单
+
+这是课设工程实际使用的依赖（来自仓库 `Cargo.toml`）：
+
 ```toml
+[dependencies]
 cortex-m = { version = "0.7.7", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.7.5"
 defmt = "1.0.1"
 defmt-rtt = "1.1.0"
-embassy-executor = { version = "0.10.0", features = ["defmt", "executor-interrupt", "executor-thread", "platform-cortex-m"] }
+embassy-executor = { version = "0.10.0", features = [
+  "defmt",
+  "executor-interrupt",
+  "executor-thread",
+  "platform-cortex-m",
+] }
 embassy-futures = "0.1.2"
-embassy-stm32 = { version = "0.6.0", features = ["defmt", "exti", "memory-x", "stm32f407zg", "time-driver-tim4"] }
-embassy-time = { version = "0.5.1", features = ["defmt-timestamp-uptime", "tick-hz-8_000_000"] }
+embassy-stm32 = { version = "0.6.0", features = [
+  "defmt",
+  "exti",
+  "memory-x",
+  "stm32f407zg",
+  "time-driver-tim4",
+] }
+embassy-time = { version = "0.5.1", features = [
+  "defmt-timestamp-uptime",
+  "tick-hz-8_000_000",
+] }
+embassy-sync = "0.8.0"
+display-interface-spi = "0.5.0"
+embedded-graphics = "0.8.2"
 embedded-hal = "1.0.0"
+embedded-hal-async = "1.0.0"
 embedded-io = "0.7.1"
+embedded-io-async = "0.7.0"
+embedded-sdmmc = { path = "vendor/embedded-sdmmc" }
 heapless = "0.9.2"
-nb = "1.1.0"
+libm = "0.2"
+mipidsi = "0.10.0"
 panic-probe = { version = "1.0.0", features = ["print-defmt"] }
+static_cell = "2.1.1"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+panic = "abort"
 ```
 
-我们不需要像原来使用stm32-hal的rust实现那样自己手写memory.x。embassy已经提供了memory-x feature，我们在添加这个库时自己手动启用这个feature即可。
+几个容易困惑的点：
 
-之后，我们需要进入main.rs文件，删掉所有内容。我们先写一个闪灯程序。看原理图，LED连接在PC13引脚上，另一端连接3V3，说明如果要让这个LED灯亮起来，我们需要拉低PC13的电平。
+- `stm32f407zg` feature 选芯片型号；`time-driver-tim4` 指定 TIM4 当 Embassy 的时间基准。
+- `embedded-sdmmc` 走本地路径，因为项目针对 FAT32 大卡改过源码（见 SDIO 章节）。
+- `mipidsi` + `embedded-graphics` 是屏幕那一路用的，`libm` 给电机控制提供 `sinf`。
+- `panic = "abort"` + `panic-probe`：panic 时打印错误信息并停机，不 unwinding。
 
-首先声明无标准库，且无main函数。
+## 闪灯验证
 
-```rust
-#![no_std]
-#![no_main]
-```
+先别急着上大项目，写一个闪灯程序验证“编译 → 烧录 → 跑起来”整条链路。STM32F407ZG-P1 核心板的板载 LED 通常接 PC13，低电平点亮（以自己板子的原理图为准）：
 
-然后引入embassy-stm32的gpio模块以及embassy-executor的Spawner类，并引入embassy-time的Timer来实现非阻塞的延时。
-```rust
-use embassy_executor::Spawner;
-use embassy_stm32::{Output, Level, Speed};
-use embassy_time::Timer;
-```
-因为声明了无标准库，所以panic需要我们自己处理。我们可以通过引入defmt_rtt和panic_probe自动帮我们进行处理。
-```rust
-use {defmt_rtt as _, panic_probe as _};
-```
-
-之后，我们需要借助embassy-executor的Spawner来执行我们自己的main函数。由于embassy是异步库，所以我们的main函数也必须是异步的。
-
-```rust
-#[embassy_executor::main]
-async fn main(_spawner: Spawner) {
-}
-```
-
-初始化stm32，并定义我们LED连接的引脚。
-```rust
-let p = embassy_stm32::init(Default::default());
-let mut led = Output::new(p.PC13, Level::High, Speed::Low);
-```
-之后，我们需要一个loop来执行我们的主要逻辑部分。我们的逻辑只有把led引脚的电平置低。
-
-```rust
-loop {
-    led.set_low();
-    Timer::after_millis(500).await;
-    led.set_high();
-    Timer::after_millis(500).await;
-}
-```
-至此，我们的程序就可以完成闪灯操作了。
-
-完整代码：
 ```rust
 #![no_std]
 #![no_main]
@@ -141,6 +139,18 @@ async fn main(_spawner: Spawner) {
         Timer::after_millis(500).await;
     }
 }
-
 ```
 
+然后：
+
+```bash
+cargo run --release
+```
+
+cargo 会编译，并自动通过 probe-rs 烧录进 STM32。LED 以 1 Hz 闪烁，说明环境通了。
+
+::: important
+PC13 只是大多数 F407 核心板的习惯接法。如果灯不亮，先查自己板子的原理图，别默认。
+:::
+
+<Catalog />

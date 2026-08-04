@@ -11,13 +11,8 @@ category:
   - STM32
   - SDIO
 ---
+播放器的第一步不是发声，而是读文件。WAV 音乐躺在 SD 卡上，主控要用 SDIO 4-bit 总线把数据块搬进内存，再用文件系统把它们拼成一首首曲目。
 
-有了 Blinky，我们的单片机不再是沉默的石头。但真正的音乐播放器，第一步不是发声——而是读取文件。
-
-本章基于 embassy-stm32 的 SDMMC 模块和 embedded-sdmmc 文件系统库，完成从 SD 卡初始化到遍历目录、构建播放列表的全流程。
-
-- 核心任务：初始化 SDIO 外设，挂载 FAT32 文件系统，扫描 WAV 文件。
-
-<!-- more -->
+本章完成三件事：初始化 SDMMC 外设识别 SD 卡、用 embedded-sdmmc 挂载 FAT32、扫描根目录构建 WAV 播放列表。
 
 <Catalog />

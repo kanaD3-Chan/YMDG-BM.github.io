@@ -8,101 +8,104 @@ category:
   - AS5600
 ---
 
-AS5600 是 AMS 出品的 12 位磁性旋转位置传感器，通过 I2C 接口输出 0-4095 的角度值，分辨率 0.0879°。
+AS5600 是 AMS 出品的 12 位磁性旋转位置传感器，一圈输出 0~4095，分辨率约 0.0879°。径向磁铁旋转时，芯片内部的霍尔阵列检测磁场方向变化，经 DSP 计算输出绝对角度。
 
-<!-- more -->
+## 引脚与配置
 
-## AS5600 原理
+AS5600 挂在 **I2C2** 上，7 位地址固定 `0x36`：
 
-芯片内部有一组霍尔传感器阵列。径向磁铁旋转时，霍尔传感器检测到的磁场方向变化，经过内部 DSP 计算输出绝对角度。I2C 地址固定为 `0x36`（7 位）。
-
-## 关键寄存器
-
-| 寄存器 | 地址 | 位宽 | 说明 |
-|---|---|---|---|
-| RAW_ANGLE | 0x0C | 16 bit | 原始角度（0-4095），大端序 |
-| ANGLE | 0x0E | 16 bit | 缩放后角度 |
-| STATUS | 0x0B | 8 bit | bit 5 = 磁铁检测 |
-| MAGNITUDE | 0x1B | 16 bit | 磁场强度 |
-
-## 驱动结构
-
-泛型设计，换 MCU 只需提供实现了 `I2c` trait 的总线实例：
+| 信号 | GPIO |
+|---|---|
+| I2C2_SCL | PB10 |
+| I2C2_SDA | PB11 |
 
 ```rust
-use embedded_hal_async::i2c::I2c;
+let as5600_i2c = i2c::I2c::new(
+    p.I2C2,
+    p.PB10,
+    p.PB11,
+    p.DMA1_CH7,
+    p.DMA1_CH2,
+    Irqs,
+    simple_foc::as5600::i2c_config(),
+);
+```
 
-pub struct As5600<I2C> {
-    i2c: I2C,
+总线配置为 100 kHz，超时 20 ms：
+
+```rust
+pub fn i2c_config() -> Config {
+    let mut config = Config::default();
+    config.frequency = Hertz::khz(100);
+    config.timeout = Duration::from_millis(20);
+    config
 }
 ```
 
-## 寄存器读取
+## 读取角度
 
-`write_read` 一键完成"写寄存器地址 + 读数据"：
+核心寄存器是 `RAW_ANGLE`（0x0C），16 位大端序，但只有低 12 位有效：
 
 ```rust
-async fn read_u8(&mut self, reg: u8) -> Result<u8, As5600Error<E>> {
-    let mut buf = [0u8; 1];
-    self.i2c
-        .write_read(AS5600_ADDR, &[reg], &mut buf)
-        .await
-        .map_err(As5600Error::I2c)?;
-    Ok(buf[0])
-}
+const AS5600_ADDR: u8 = 0x36;
+const RAW_ANGLE_REG: u8 = 0x0c;
+const FULL_TURN_MRAD: u32 = 6283;
+const AS5600_STEPS: u32 = 4096;
 
-async fn read_u16(&mut self, reg: u8) -> Result<u16, As5600Error<E>> {
+let mut buf = [0u8; 2];
+i2c.write_read(AS5600_ADDR, &[RAW_ANGLE_REG], &mut buf).await?;
+
+let raw = (((buf[0] as u16) << 8) | buf[1] as u16) & 0x0fff;
+let angle_mrad = raw as u32 * FULL_TURN_MRAD / AS5600_STEPS;
+```
+
+角度单位统一用**毫弧度**（一整圈 6283 mrad），避免浮点和角度制换来换去。电机控制、堵转判断、手摇跳转全在这个单位下工作。
+
+## 任务化：原子变量 + snapshot
+
+AS5600 是一个独立异步任务，每 5 ms 读一次角度，写进全局原子变量：
+
+```rust
+static VALID: AtomicBool = AtomicBool::new(false);
+static ANGLE_MRAD: AtomicU32 = AtomicU32::new(0);
+
+#[embassy_executor::task]
+pub async fn as5600_task(mut i2c: I2c<'static, Async, Master>) {
     let mut buf = [0u8; 2];
-    self.i2c
-        .write_read(AS5600_ADDR, &[reg], &mut buf)
-        .await
-        .map_err(As5600Error::I2c)?;
-    Ok(u16::from_be_bytes(buf))  // AS5600 使用大端序
+    loop {
+        match i2c.write_read(AS5600_ADDR, &[RAW_ANGLE_REG], &mut buf).await {
+            Ok(()) => {
+                let raw = (((buf[0] as u16) << 8) | buf[1] as u16) & 0x0fff;
+                ANGLE_MRAD.store(raw as u32 * FULL_TURN_MRAD / AS5600_STEPS, Ordering::Relaxed);
+                VALID.store(true, Ordering::Relaxed);
+            }
+            Err(_) => {
+                VALID.store(false, Ordering::Relaxed);
+            }
+        }
+        Timer::after_millis(5).await;
+    }
 }
 ```
 
-::: warning 注意字节序
-AS5600 的 16 位寄存器是大端序。Rust 的 `from_be_bytes` 直接处理转换，省掉手动移位。
-:::
-
-## 磁铁检测
-
-没有磁铁或距离太远时角度无效。STATUS 寄存器 bit 5 指示状态：
+主循环不需要阻塞等 I2C，随时 `snapshot()` 拿一个瞬时快照：
 
 ```rust
-pub async fn is_magnet_detected(&mut self) -> Result<bool, As5600Error<E>> {
-    let status = self.get_status().await?;
-    Ok((status & 0b0010_0000) != 0)
+pub struct Snapshot {
+    pub valid: bool,
+    pub angle_mrad: u16,
+}
+
+pub fn snapshot() -> Snapshot {
+    Snapshot {
+        valid: VALID.load(Ordering::Relaxed),
+        angle_mrad: ANGLE_MRAD.load(Ordering::Relaxed) as u16,
+    }
 }
 ```
 
-后续 FOC 控制必须检查磁铁状态，否则电机会乱转。
+`VALID` 标记很重要：磁铁没贴好或总线出错时角度是垃圾数据，堵转检测拿到 `valid == false` 就直接跳过本轮，而不是拿错误角度算速度。
 
-## 角度换算
+## 为什么是 5 ms
 
-```rust
-let raw = as5600.read_u16(RAW_ANGLE_REG).await?;
-let degrees = (raw as f32) * 360.0 / 4096.0;
-```
-
-## 错误处理
-
-```rust
-#[derive(Debug)]
-pub enum As5600Error<E> {
-    I2c(E),                  // 总线错误
-    MagnetNotDetected,       // 磁铁缺失
-}
-```
-
-## SimpleFOC 展望
-
-在项目中，AS5600 作为 `foc` 模块的子模块存在：
-
-```rust
-mod foc {
-    mod as5600;
-}
-```
-
-角度数据是 FOC（磁场定向控制）的关键输入。结合 Clarke/Park 变换、PID 控制器和 SVPWM 输出，FOC 能实现电流环、速度环和位置环的闭环电机控制。这些内容目前尚未实现，留待扩展。
+转盘 33.3 RPM ≈ 每秒 3490 mrad，5 ms 一转盘约走 17.5 mrad，对应 AS5600 约 11 个量化步。分辨率够判断“动没动”，又不会让 I2C 任务把总线占满。
