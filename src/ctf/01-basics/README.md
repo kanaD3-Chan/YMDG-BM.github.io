@@ -23,6 +23,8 @@ Pwn 要在 Linux 下调试，逆向要在 Linux 下跑工具，Misc 要用 Pytho
 
 **Python 基础**：变量、循环、函数、字节操作。CTF 脚本几乎都用 Python 写，这是必须会的。
 
+**CTF 黑话册**：群里聊天像加密通话？看不懂的词来这查。
+
 ::: tip
 如果你完全没用过 Linux 和 Python，建议先读 [你缺失的那门计算机课](https://www.criwits.top/missing/) 打好电脑基础，再回来继续。
 :::
