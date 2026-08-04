@@ -5,6 +5,7 @@ index: true
 order: 3
 dir:
   link: true
+  order: 3
 
 category:
   - 数据结构

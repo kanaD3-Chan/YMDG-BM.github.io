@@ -5,6 +5,7 @@ index: true
 order: 4
 dir:
   link: true
+  order: 4
 
 category:
   - 数据结构
