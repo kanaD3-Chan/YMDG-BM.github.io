@@ -1,8 +1,8 @@
 ---
 title: AI 安全
-order: 8
+order: 12
 dir:
-  order: 8
+  order: 12
   link: true
 index: true
 icon: mdi:robot-outline

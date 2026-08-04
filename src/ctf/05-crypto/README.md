@@ -1,8 +1,8 @@
 ---
 title: 密码学
-order: 6
+order: 10
 dir:
-  order: 6
+  order: 10
   link: true
 index: true
 icon: mdi:key-variant

@@ -1,8 +1,8 @@
 ---
 title: 通用基础
-order: 2
+order: 6
 dir:
-  order: 2
+  order: 6
   link: true
 index: true
 icon: mdi:laptop

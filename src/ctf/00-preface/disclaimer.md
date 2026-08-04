@@ -1,6 +1,6 @@
 ---
 title: 免责声明
-order: 3
+order: 2
 icon: mdi:shield-alert-outline
 category:
   - CTF

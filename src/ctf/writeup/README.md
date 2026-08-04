@@ -1,8 +1,8 @@
 ---
 title: Writeup
-order: 9
+order: 14
 dir:
-  order: 9
+  order: 14
   link: true
 index: false
 icon: mdi:file

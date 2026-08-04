@@ -1,8 +1,8 @@
 ---
 title: Misc 杂项
-order: 7
+order: 11
 dir:
-  order: 7
+  order: 11
   link: true
 index: true
 icon: mdi:puzzle-outline

@@ -1,8 +1,8 @@
 ---
 title: 二进制安全（Pwn）
-order: 5
+order: 9
 dir:
-  order: 5
+  order: 9
   link: true
 index: true
 icon: mdi:bug-outline

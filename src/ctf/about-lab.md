@@ -1,8 +1,6 @@
 ---
 title: 关于SLsec实验室......
-order: 3
-dir:
-  order: 3
+order: 4
 icon: solar:hourglass-broken
 category:
   - CTF

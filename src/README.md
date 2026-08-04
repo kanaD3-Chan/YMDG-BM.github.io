@@ -20,7 +20,7 @@ actions:
     icon: mdi:github
     link: https://github.com/kanaD3-Chan/YMDG-BM.github.io
 
-  - text: CTF Writeup
+  - text: CTF 分区
     icon: flag
     link: ./ctf/
 
@@ -73,30 +73,30 @@ highlights:
         link: ./operation/
 
   - header: 🏴 CTF
-    description: CTF 入门指路
+    description: 零基础入门手册与实战题解
     image: /assets/image/flag-svgrepo-com.svg
     bgImage: /assets/bg/red.jpg
     bgImageDark: /assets/bg/red-dark.jpg
     features:
-      - title: Web安全
-        icon: globe
-        details: Web漏洞挖掘与利用
-        link: ./ctf/web/
+      - title: 入门手册
+        icon: mdi:book-open-page-variant
+        details: 从零开始的六大方向系统教程
+        link: ./ctf/
 
-      - title: 逆向工程
-        icon: devicon-plain:ghidra
-        details: 二进制程序分析与逆向
-        link: ./ctf/reverse/
+      - title: Writeup
+        icon: mdi:file
+        details: 赛题解析与团队实战记录
+        link: ./ctf/writeup/
 
-      - title: 密码学
-        icon: lock
-        details: 密码学算法与攻击方法
-        link: ./ctf/crypto/
+      - title: 实验室
+        icon: solar:hourglass-broken
+        details: SLsec 实验室介绍与招新
+        link: ./ctf/about-lab.md
 
-      - title: 杂项
-        icon: puzzle-piece
-        details: 其他各类题型解法
-        link: ./ctf/misc/
+      - title: 速查
+        icon: compass
+        details: 六类题型的速查卡片
+        link: ./wiki/ctf/
 
   - header: 🚀 快速开始
     description: 了解如何使用本Wiki

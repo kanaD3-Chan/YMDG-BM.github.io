@@ -41,13 +41,6 @@ export const zhSidebar = sidebar({
       children: "structure",
     },
     {
-      text: "CTF 入门手册",
-      icon: "mdi:book-open-page-variant",
-      prefix: "ctf-handbook/",
-      link: "ctf-handbook/",
-      children: "structure",
-    },
-    {
       text: "Wiki",
       icon: "mdi:earth",
       prefix: "wiki/",
