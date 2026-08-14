@@ -230,7 +230,6 @@ background: rgba(102, 204, 255, 0.15)
         .vp-portfolio-avatar {
             display: flex;
             align-items: center;
-            width: min(50%, 800px);
         }
     }
 
