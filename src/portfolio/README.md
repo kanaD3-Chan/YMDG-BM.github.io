@@ -234,6 +234,5 @@ background: rgba(102, 204, 255, 0.15)
     }
 
     .vp-portfolio-avatar img {
-        max-height: min(93vh, 600px);
     }
 </style>
