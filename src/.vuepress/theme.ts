@@ -41,7 +41,7 @@ export default hopeTheme({
     config: {
       "/misc/我的OC-KanaDE.html": {
         password: "kanade2026",
-        hint: "我的OC：KanaDE",
+        hint: "不许看！",
       },
     },
   },
