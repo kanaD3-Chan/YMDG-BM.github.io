@@ -39,7 +39,10 @@ export default hopeTheme({
 
   encrypt: {
     config: {
-      "kanade2026": "我的OC：KanaDE",
+      "/misc/我的OC-KanaDE.html": {
+        password: "kanade2026",
+        hint: "我的OC：KanaDE",
+      },
     },
   },
 
