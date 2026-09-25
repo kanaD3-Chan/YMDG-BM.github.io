@@ -6,6 +6,7 @@ category:
 tag:
   - 杂谈
   - 人设
+password: kanade2026
 ---
 ::: important
 本文是虚构人物设定稿。虽然她看起来很像某个人，但那个人和我没有关系。
