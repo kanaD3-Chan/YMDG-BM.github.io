@@ -4,7 +4,7 @@ import { zhNavbar } from "./navbar/index.js";
 import { zhSidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
-  hostname: "",
+  hostname: "https://kanade-chan.top",
 
   author: {
     name: "KanaDE",
@@ -121,6 +121,18 @@ export default hopeTheme({
     // You MUST generate and use your own comment service in production.
     blog: false,
     slimsearch: true,
+
+    feed: {
+      rss: true,
+      atom: true,
+      json: true,
+      channel: {
+        title: "KanaDE Notes",
+        link: "https://kanade-chan.top",
+        description: "KanaDE的个人笔记存储站",
+        copyright: "© 2026 KanaDE",
+      },
+    },
 
     components: {
       components: ["Badge", "VPCard"],
