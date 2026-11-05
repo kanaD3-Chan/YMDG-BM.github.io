@@ -295,16 +295,6 @@ AI 已经能够完成越来越多过去需要人工投入大量时间的工作�
 欢迎添加我的友链！如果你想添加我的友链，那么请复制以下内容作为参考：
 
 ```yaml
-title: KanaDE的小册子
-desc: 不止思考，要去感受
-logo: https://kanade-chan.top/logo.png
-link: https://kanade-chan.top/
-background: rgba(138, 253, 222, 0.15)
-```
-
-欢迎找我添加友链！如果你想添加友链，那么请参考以下格式：
-
-```yaml
 title: 你的 ID
 desc: 你的描述
 logo: 你的头像/logo
