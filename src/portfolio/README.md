@@ -23,8 +23,6 @@ footer: true
 ---
 <!-- more -->
 
-# 👋 你好，我是 KanaDE
-
 > **Code is cheap. Show me the reasoning.**
 
 一个喜欢拆解复杂系统、研究技术原理，并尝试从零构建东西的人。
@@ -81,17 +79,19 @@ footer: true
 
 #### 01. Mistake Agent v2
 
-<badge color="success">持续开发</badge> <badge>AI Agent</badge> <badge>Rust</badge>
+<badge color="success">持续开发 · v0.1.0-alpha</badge> <badge>AI Agent</badge> <badge>Rust 2024</badge> <badge>Tauri v2</badge>
 
-**一个以本地执行内核为核心的智能学习辅助系统。**
+**面向中学生的本地智能错题管理与辅助学习桌面 Agent。**
 
-- 基于 Tauri 构建桌面应用。
-- 使用自定义 Rust Kernel 承担核心执行逻辑。
-- 集成 DeepSeek Responses API 与 SiliconFlow Qwen3-VL。
-- 使用 Pyodide 提供代码验证能力。
-- 通过 ADR 记录架构决策，目前已有 34 项 ADR。
+采用 Tauri v2 + Vue 3 桌面端与进程内单二进制独立 Rust Kernel 架构，数据与模型密钥全部保存在本机。
 
-**关注重点：** Agent 不只是一个聊天界面。它需要理解任务、调用工具、执行操作，并能够检查自己的结果。
+核心架构与特性：
+
+- **单模型统一调度（ADR-0045）**：全面收敛至 DeepSeek `deepseek-flash`（Responses API），利用 thinking 思考链、结构化工具调用与原生多模态 `input_image` 统一承担对话、调度、判分与错题归档，彻底废除多模型拼接的高延迟与不一致性。
+- **两段式插件微内核（ADR-0035 / ADR-0036）**：内核插件（storage, memory, compute, model）与业务插件（grading, practice, report, exam, tracking）构建期自动发现与解耦挂载。
+- **用户主导会话流（ADR-0044）**：摒弃模型自作主张切换话题的不可控行为，会话控制权完全交还用户；支持消息树分支编辑与跨会话持久化记忆。
+- **本地 WASM 运算沙箱**：基于 Pyodide 提供安全代码执行与理科题算式真值对拍验证，系统临时目录流转，全链路审计日志脱敏。
+- **演进式工程沉淀**：严格遵循 ADR 规范驱动设计，截至目前已沉淀 **49 项 ADR**。
 
 角色：项目负责人 / Backend / Agent Architecture
 
@@ -103,51 +103,43 @@ GitHub：[kanaD3-Chan/mistake-agent](https://github.com/kanaD3-Chan/mistake-agen
 
 #### 02. Writeup Platform
 
-<badge color="success">已部署 / 持续维护</badge> <badge>Full-stack</badge> <badge>Rust</badge>
+<badge color="success">已部署 / 持续维护</badge> <badge>Rust</badge> <badge>Vue 3</badge> <badge>Full-stack</badge>
 
-**面向 CTF 学习与竞赛的 Writeup 管理平台。**
+**专为对接 [ret2shell](https://github.com/ret2shell/ret2shell) CTF 平台构建的自托管 Writeup 提交与管理系统。**
 
-后端采用 Rust Axum、SQLx 与 PostgreSQL，前端采用 Vue 3、Vite 和 Pinia。
+后端基于 Rust 多 crate 工作空间（Axum + SQLx + PostgreSQL），前端采用 Vue 3 + Vite + Pinia。
 
-主要功能：
+主要功能与工程特性：
 
-- 对接既有 ret2shell 环境，实现 JWT SSO 身份认证。
-- 支持 PDF、DOCX 等 Writeup 文件上传。
-- 支持多语言内容管理。
-- 使用独立后端处理平台业务与数据访问。
+- **双数据库解耦架构**：自建独立 PostgreSQL（负责 Writeup 元数据存储与自动化版本迁移）与 ret2shell 数据库（**只读连接**，解析比赛、队伍与管理员鉴权），配合 ret2shell HTTP API 实现基于临时验证码的 JWT 单点登录（SSO）。
+- **防御性文件流转与去重**：严格校验 Magic Bytes 文件头（针对 DOCX 深入检查 `[Content_Types].xml`）；基于 SHA-256 哈希进行跨队伍防抄袭与赛事内去重；采用临时文件落盘 + POSIX 原子重命名（Atomic Rename Upsert）保障覆盖写一致性。
+- **免下载站内在线预览**：深度集成 PDF.js 与 `docx-preview`，参赛选手与裁判无需下载未知文件即可在站内直接审阅排版。
+- **赛事化管理与多语言支持**：原生适配简中/繁中/英/日四国语言；支持赛事置顶直达、训练场（个人）与赛事（战队）权限隔离、RFC 5987 友好文件名批量 ZIP 打包导出。
+- **容器化交付**：提供多阶段构建 Dockerfile（Rust 后端 + Vue 前端 + Nginx SPA 路由反代）与 docker-compose 一键生产部署。
 
-技术栈：Rust / Axum / SQLx / PostgreSQL / Vue 3 / Vite / Pinia
+技术栈：Rust / Axum / SQLx / PostgreSQL / Vue 3 / Vite / Pinia / Docker
 
-这里的重点是围绕现有基础设施构建配套的学习成果管理系统。
+GitHub：[kanaD3-Chan/writeup-platform](https://github.com/kanaD3-Chan/writeup-platform)
 
 ---
 
-#### 03. STM32-FOC-MP3
+#### 03. STM32-FOC-MP3 (Haptic Sound Yoke)
 
-<badge color="success">已完成</badge> <badge>Embedded Rust</badge> <badge>FOC</badge>
+<badge color="success">已完成</badge> <badge>Embedded Rust</badge> <badge>FOC</badge> <badge>no_std</badge>
 
-**基于 STM32F407 的拟物黑胶 WAV 音乐播放器。**
+**基于 STM32F407 的触觉拟物化黑胶转盘音频播放系统。**
 
-一个把音频播放和实体交互结合起来的嵌入式项目。
+打破传统按键交互范式，基于 STM32F407ZGT6 与纯 Rust (`no_std` + Embassy 异步执行器) 工具链，实现集电机触觉反馈、高吞吐存储与硬件音频解码于一体的便携式感官控制器。
 
-项目采用 STM32F407ZGT6，使用 Rust `no_std` 与 Embassy 异步执行器构建底层软件。
+核心功能与底层设计：
 
-核心功能：
+- **FOC 开环正弦旋转控制**：基于 TIM1 三相互补 PWM（20 kHz 边沿对齐, 12V 供电），静音平稳驱动 7 对极无刷直流电机（BLDC）维持黑胶唱片标准的 33.3 RPM 恒定自转。
+- **磁编码器堵转感知与搓盘打碟**：AS5600 磁编码器（12-bit 分辨率, 硬件 I²C）5ms 高频采样；50ms 窗口实际角增量连续低于预期 20% 超 400ms 自动切断电机动力并转入打碟模式；**物理转盘旋转 1 整圈 ($2\pi$) 精准等比例映射 30 秒音频快进/快退**，松手 800ms 后平滑恢复播放。
+- **VS1053 硬件流控解码**：SPI2 区分控制与数据流，绑定 PA11 DREQ 硬件中断，采用 512 字节环形缓冲搭配 32 字节 DMA 异步分片微包流式供给，解析 WAV 容器 `byte_rate` 保证毫秒级定位无杂音爆音。
+- **SDIO 4-bit 总线与上游 Bug 修复**：利用 SDIO 4-bit（24 MHz + DMA2_CH6）高速吞吐；**排查并修复上游 `embedded-sdmmc` 库中 FAT32 目录项大卷簇号截断缺陷**（正确拼接 `(hi << 16) | lo` 完整 32 位簇号），解决大容量卡定位异常。
+- **嵌入式离屏图形渲染**：ST7735S 128×160 TFT 彩屏，基于 `embedded-graphics` 实现 `DmaSpiBus` 异步总线适配与 `ProgressBuffer` 离屏渲染机制，彻底消除屏幕刷新撕裂与频闪。
 
-- 使用 FOC 开环正弦控制驱动无刷电机，使实体转盘以约 33.3 RPM 旋转。
-- 使用 AS5600 磁编码器检测转盘角度，实现人为触摸检测与搓盘交互。
-- 通过 VS1053 硬件音频解码芯片完成 WAV 音频流式播放。
-- 使用 SDIO 4-bit 总线与 FAT32 文件系统读取存储卡中的音乐。
-- 使用 ST7735S TFT 彩屏和 `embedded-graphics` 实现界面显示。
-- 使用 DMA 和 Embassy 异步任务处理外设通信。
-
-**一个值得单独记录的工程问题：**
-
-在 SD 卡文件系统适配过程中，发现并修复了上游 `embedded-sdmmc` 中 FAT32 目录项高位簇号未正确拼接的问题，并将修改后的依赖纳入项目。
-
-这类问题往往不会在小容量测试卡上暴露，却可能影响大容量存储设备上的文件定位。
-
-技术栈：Rust / `no_std` / Embassy / STM32F4 / FOC / SDIO / SPI / I²C / DMA
+技术栈：Rust / `no_std` / Embassy / STM32F4 / FOC / SDIO / SPI / I²C / DMA / embedded-graphics
 
 Gitee：[STM32-FOC-MP3](https://gitee.com/kanaDE-Chan/stm32-foc-mp3)
 
@@ -157,19 +149,17 @@ Gitee：[STM32-FOC-MP3](https://gitee.com/kanaDE-Chan/stm32-foc-mp3)
 
 <badge color="success">已完成</badge> <badge>Embedded C</badge> <badge>8051</badge>
 
-**基于 IAP15W4K61S4 的键盘与显示交互终端。**
+**基于 IAP15W4K61S4 单片机的键盘与显示交互控制终端。**
 
-从 MCU 外设驱动到上层状态管理，实现一套具有键盘输入、显示和串口交互能力的硬件终端。
+在资源极度受限的增强型 8051 硬件平台（STC IAP15W4K61S4）上，从底层外设驱动到上层业务逻辑，实现一套工业级人机交互终端系统。
 
-主要功能：
+核心设计：
 
-- PS/2 键盘通信协议解析。
-- 键盘状态管理，包括 Shift、Caps Lock 与 Break Code。
-- VFD / LCD 显示驱动与字符渲染。
-- UART 串口通信及中断接收。
-- 基于状态机的输入处理与显示逻辑。
+- **PS/2 键盘通信协议栈**：编写硬件中断驱动的 PS/2 双向通信逻辑，实现时钟/数据线精准时序采样、键盘扫描码转换、Shift/Caps Lock 状态管理以及通断码（Make/Break Code）过滤。
+- **VFD / LCD 显示子系统**：8 位并行数据总线驱动 VFD（真空荧光屏）与 LCD，内置 95 字符 5×7 点阵 ASCII 点阵生成器与地址映射渲染驱动。
+- **分层有限状态机（FSM）**：建立 `SystemState_t` 状态机模型（空闲监听、串口直通显示、键盘打字录入模式切换），配合 UART1 环形中断接收缓冲区，实现无 OS 裸机环境下非阻塞、事件驱动的交互链路。
 
-技术栈：C / 8051 / IAP15W4K61S4 / PS/2 / UART / GPIO
+技术栈：C / 8051 / IAP15W4K61S4 / PS/2 / VFD / UART / GPIO / Keil C51
 
 Gitee：[DICK-Project](https://gitee.com/kanaDE-Chan/DICK-Project)
 
@@ -179,13 +169,19 @@ Gitee：[DICK-Project](https://gitee.com/kanaDE-Chan/DICK-Project)
 
 #### 05. KanaDE_Kernel
 
-<badge color="warning">开发中</badge> <badge>Operating Systems</badge>
+<badge color="warning">开发中</badge> <badge>Operating Systems</badge> <badge>x86-64</badge>
 
-从零开始编写的 x86-64 实验性操作系统内核。
+从零编写的 x86-64 独立实验性操作系统内核，基于 Limine 引导协议。
 
-目前涉及 Bootloader、GDT、IDT 等基础设施，后续继续探索内存管理、中断处理和进程调度。
+已实现模块与核心机制：
 
-技术栈：C / x86-64 / Assembly
+- **引导与执行环境**：遵循 Limine 引导协议进入 64 位长模式，配置 CR0/CR4 寄存器开启 FPU 与 SSE 向量指令集支持。
+- **基础基础设施**：构建 GDT（全局描述符表与汇编加载器）与 IDT（256 项中断描述符表），支持 CPU 异常捕获与硬件中断现场保护。
+- **物理内存管理（PMM）**：解析系统内存图（Memory Map），基于位图（Bitmap）算法实现物理页框（4 KiB Page Frame）的高效追踪、无锁分配与释放。
+- **虚拟内存管理（VMM）**：搭建完整 x86-64 架构 4 级页表（PML4 / PDPT / PD / PT）映射机制（`vmm_map_page`），完成高半核虚拟地址空间隔离与 `0xDEADBEEFCAFEBABE` 虚拟地址读写断言测试。
+- **裸机图形控制台**：基于 Limine 线性帧缓冲（Framebuffer）与 PSF 点阵字体解析，实现支持颜色、换行与滚动输出的内核格式化控制台（`fb_console`）。
+
+技术栈：C / x86-64 / Assembly / Limine / QEMU
 
 GitHub：[KanaDE_Kernel](https://github.com/YMDG-BM/KanaDE_Kernel)
 
@@ -193,9 +189,17 @@ GitHub：[KanaDE_Kernel](https://github.com/YMDG-BM/KanaDE_Kernel)
 
 #### 06. JavaFX Music Player
 
-<badge color="success">已完成</badge> <badge>Java</badge>
+<badge color="success">已完成</badge> <badge>Java 17</badge> <badge>JavaFX</badge>
 
-基于 JavaFX 的桌面音乐播放器，实现本地音乐管理、播放列表与基础播放交互。
+基于 Java 17 与 JavaFX 17 构建的现代化模块化桌面音乐播放器。
+
+核心设计：
+
+- **模块化架构**：基于 Java Platform Module System（JPMS `module-info.java`）与 Maven 进行工程组织，集成 ControlsFX UI 增强库。
+- **MVC 分层设计**：通过 FXML 进行界面解耦，实现主播放视窗（MainWindow）、播放列表管理视窗（MusicListWindow）与关于视窗的多窗口单例及状态同步。
+- **媒体流解耦加载**：封装异步文件加载器（`MusicFileLoader`），配合 `MusicPlayer` 核心类实现本地音频解析、播放队列调度与播放状态持久化。
+
+技术栈：Java 17 / JavaFX 17 / FXML / ControlsFX / Maven
 
 Gitee：[java-course-design](https://gitee.com/nachn_admin/java-course-design)
 
@@ -286,9 +290,9 @@ AI 已经能够完成越来越多过去需要人工投入大量时间的工作�
 
 ---
 
-<text align="center">Build things. Understand things. Keep questioning.</text>
+<p align="center">Build things. Understand things. Keep questioning.</p>
 
-<text align="center">© 2026 KanaDE</text>
+<p align="center">© 2026 KanaDE</p>
 
 
 ## 友链
@@ -408,8 +412,5 @@ background: rgba(102, 204, 255, 0.15)
             display: flex;
             align-items: center;
         }
-    }
-
-    .vp-portfolio-avatar img {
     }
 </style>
